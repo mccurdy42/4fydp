@@ -1,2 +1,2 @@
 # 4fydp
-Capstone FYPD for Elementary School Timetable
+Capstone FYDP for Elementary School Timetable
