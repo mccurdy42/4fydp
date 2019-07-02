@@ -3,7 +3,7 @@
  * Author: mccurdy
  * Creation Date: Jul 1, 2019 at 9:17:23 PM
  *********************************************/
-
+//this is the intial assignment problem
 //i=subject
 int N=3; //there are 28 nodes in the network
 range r1 = 1..N; //we define ranges to declare dimensions of variables and parameters, you can define as many as you need
@@ -35,6 +35,7 @@ int rijkt = 1;
 //decision variables
 dvar boolean x[r1][r2][r3][r4]; //x is the binary location variable, 'boolean' defines a binary variable
 
+//objective function
 maximize  sum(i in r1,j in r2, k in r3, t in r4)(rijkt)*x[i,j,k,t]; //objective function in minimization type
 
 subject to //constraints are declared below
