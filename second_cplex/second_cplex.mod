@@ -19,16 +19,23 @@ range r3 = 1..N3;
 range class = 1..2;
 
 //t = time
-int N4=12;
+int N4=30;
 range day1 = 1..6;
 range day2 = 7..12;
+range day3 = 13..18;
+range day4 = 19..24;
+range day5 = 25..30;
 
 range r4 = 1..N4;
 
 // Problem parameters are defined below
-int prep[r2]= [96,96,48]; //prep time array
-int lengtht[r4]= [40,60,50,50,60,40,40,60,50,50,60,40];   //demand at each node
-int teachMin[r2]=[504,504,252];
+int prep[r2]= [240,240,120]; //prep time array
+int lengtht[r4]= [40,60,50,50,60,40,
+				 40,60,50,50,60,40,
+				 40,60,50,50,60,40,
+				 40,60,50,50,60,40,
+				 40,60,50,50,60,40];   
+int teachMin[r2]=[1260,1260,630];
 string subj[r1] = ["Math", "Language", "Prep"];
 int rijkt = 1;
 
@@ -50,15 +57,21 @@ subject to //constraints are declared below
 	forall(k in class, t in r4) sum(i in subjects, j in r2)x[i,j,k,t] == 1;
 	
 	//assignment3- each cohort assigned to 12 time periods
-	forall(k in class) sum(i in subjects, j in r2, t in r4)x[i,j,k,t] == 12;
+	forall(k in class) sum(i in subjects, j in r2, t in r4)x[i,j,k,t] == 30;
 	
 	//math
 	forall(k in class) sum(j in r2, t in day1) lengtht[t]*x[1,j,k,t] == 60;
 	forall(k in class) sum(j in r2, t in day2) lengtht[t]*x[1,j,k,t] == 60;
+	forall(k in class) sum(j in r2, t in day3) lengtht[t]*x[1,j,k,t] == 60;
+	forall(k in class) sum(j in r2, t in day4) lengtht[t]*x[1,j,k,t] == 60;
+	forall(k in class) sum(j in r2, t in day5) lengtht[t]*x[1,j,k,t] == 60;
 	
 	//language
 	forall(k in class) sum(j in r2, t in day1) lengtht[t]*x[2,j,k,t] >= 100;
 	forall(k in class) sum(j in r2, t in day2) lengtht[t]*x[2,j,k,t] >= 100;
+	forall(k in class) sum(j in r2, t in day3) lengtht[t]*x[2,j,k,t] >= 100;
+	forall(k in class) sum(j in r2, t in day4) lengtht[t]*x[2,j,k,t] >= 100;
+	forall(k in class) sum(j in r2, t in day5) lengtht[t]*x[2,j,k,t] >= 100;
 	
 	//prep
 	forall(j in r2) sum(t in r4) lengtht[t]*x[3,j,3,t] >= prep[j];
@@ -69,6 +82,7 @@ subject to //constraints are declared below
 
 int mathTime[class];
 int prepTime[r2];
+int teachTime[r2];
 
 execute
 {
@@ -90,6 +104,10 @@ execute
 						if(i==3)
 						{
 							prepTime[j] = prepTime[j] + lengtht[t];						
+						}
+						else
+						{
+							teachTime[j] = teachTime[j] + lengtht[t];						
 						}
    					}						
 				}			
