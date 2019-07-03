@@ -5,9 +5,10 @@
  *********************************************/
 //this is the intial assignment problem
 //i=subject
-int N=3; //there are 28 nodes in the network
+int N=4; //there are 28 nodes in the network
 range r1 = 1..N; //we define ranges to declare dimensions of variables and parameters, you can define as many as you need
-range subjects = 1..2;
+range subjects = 1..3;
+//int prepSubject = maxl(r1);
 
 //j = teacher
 int N2=3;
@@ -36,7 +37,7 @@ int lengtht[r4]= [40,60,50,50,60,40,
 				 40,60,50,50,60,40,
 				 40,60,50,50,60,40];   
 int teachMin[r2]=[1260,1260,630];
-string subj[r1] = ["Math", "Language", "Prep"];
+string subj[r1] = ["Math", "Language","Science", "Prep"];
 int rijkt = 1;
 
 //decision variables
@@ -73,16 +74,22 @@ subject to //constraints are declared below
 	forall(k in class) sum(j in r2, t in day4) lengtht[t]*x[2,j,k,t] >= 100;
 	forall(k in class) sum(j in r2, t in day5) lengtht[t]*x[2,j,k,t] >= 100;
 	
+	//science
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] >= 100;
+	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] <= 150;
+	
 	//prep
-	forall(j in r2) sum(t in r4) lengtht[t]*x[3,j,3,t] >= prep[j];
+	forall(j in r2) sum(t in r4) lengtht[t]*x[4,j,3,t] >= prep[j];
 	
 	//teaching mins
 	forall(j in r2) sum(t in r4, i in subjects, k in class) lengtht[t]*x[i,j,k,t] <= teachMin[j];
 }
 
 int mathTime[class];
+int scienceTime[class];
 int prepTime[r2];
 int teachTime[r2];
+
 
 execute
 {
@@ -103,8 +110,12 @@ execute
 						}
 						if(i==3)
 						{
-							prepTime[j] = prepTime[j] + lengtht[t];						
+							scienceTime[k]=scienceTime[k]+ lengtht[t];					
 						}
+						if(i==4)
+						{
+							prepTime[j] = prepTime[j] + lengtht[t];						
+						}						
 						else
 						{
 							teachTime[j] = teachTime[j] + lengtht[t];						
