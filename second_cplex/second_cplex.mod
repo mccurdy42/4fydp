@@ -82,6 +82,7 @@ subject to //constraints are declared below
 
 int mathTime[class];
 int prepTime[r2];
+int teachTime[r2];
 
 execute
 {
@@ -103,6 +104,10 @@ execute
 						if(i==3)
 						{
 							prepTime[j] = prepTime[j] + lengtht[t];						
+						}
+						else
+						{
+							teachTime[j] = teachTime[j] + lengtht[t];						
 						}
    					}						
 				}			
