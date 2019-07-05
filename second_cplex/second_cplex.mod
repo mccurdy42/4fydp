@@ -5,9 +5,11 @@
  *********************************************/
 //this is the intial assignment problem
 //i=subject
-int N=3; //there are 28 nodes in the network
-range r1 = 1..N; //we define ranges to declare dimensions of variables and parameters, you can define as many as you need
-range subjects = 1..2;
+int N=8; 
+range r1 = 1..N; 
+range subjects = 1..7;
+string subj[r1] = ["Math", "Language","Science", "Art", "Social Studies", "Phys-Ed", "French", "Prep"];
+int prepSubject = N;
 
 //j = teacher
 int N2=3;
@@ -17,6 +19,7 @@ range r2 = 1..N2;
 int N3=3;
 range r3 = 1..N3;
 range class = 1..2;
+int prepCohort = N3;
 
 //t = time
 int N4=30;
@@ -36,7 +39,6 @@ int lengtht[r4]= [40,60,50,50,60,40,
 				 40,60,50,50,60,40,
 				 40,60,50,50,60,40];   
 int teachMin[r2]=[1260,1260,630];
-string subj[r1] = ["Math", "Language", "Prep"];
 int rijkt = 1;
 
 //decision variables
@@ -67,22 +69,47 @@ subject to //constraints are declared below
 	forall(k in class) sum(j in r2, t in day5) lengtht[t]*x[1,j,k,t] == 60;
 	
 	//language
-	forall(k in class) sum(j in r2, t in day1) lengtht[t]*x[2,j,k,t] >= 100;
+	/*forall(k in class) sum(j in r2, t in day1) lengtht[t]*x[2,j,k,t] >= 100;
 	forall(k in class) sum(j in r2, t in day2) lengtht[t]*x[2,j,k,t] >= 100;
 	forall(k in class) sum(j in r2, t in day3) lengtht[t]*x[2,j,k,t] >= 100;
 	forall(k in class) sum(j in r2, t in day4) lengtht[t]*x[2,j,k,t] >= 100;
-	forall(k in class) sum(j in r2, t in day5) lengtht[t]*x[2,j,k,t] >= 100;
+	forall(k in class) sum(j in r2, t in day5) lengtht[t]*x[2,j,k,t] >= 100;*/
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[2,j,k,t] >= 300;
+	
+	//science
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] >= 100;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] <= 150;
+	
+	//art
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[4,j,k,t] >= 300;
+	
+	//Social Studies
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[5,j,k,t] >= 100;
+	
+	//Phys-ed
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] >= 150;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] <= 200;
+	
+	//French
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[7,j,k,t] >= 200;
 	
 	//prep
-	forall(j in r2) sum(t in r4) lengtht[t]*x[3,j,3,t] >= prep[j];
+	forall(j in r2) sum(t in r4) lengtht[t]*x[prepSubject,j,prepCohort,t] >= prep[j];
 	
 	//teaching mins
 	forall(j in r2) sum(t in r4, i in subjects, k in class) lengtht[t]*x[i,j,k,t] <= teachMin[j];
 }
 
 int mathTime[class];
+int langTime[class];
+int scienceTime[class];
+int artTime[class];
+int socialStudiesTime[class];
+int physedTime[class];
+int frenchTime[class];
 int prepTime[r2];
 int teachTime[r2];
+
 
 execute
 {
@@ -101,10 +128,34 @@ execute
 						{
 							mathTime[k]= mathTime[k]+ lengtht[t];					
 						}
+						if(i==2)
+						{
+							langTime[k]=langTime[k]+ lengtht[t];					
+						}
 						if(i==3)
 						{
-							prepTime[j] = prepTime[j] + lengtht[t];						
+							scienceTime[k]=scienceTime[k]+ lengtht[t];					
 						}
+						if(i==4)
+						{
+							artTime[k] = artTime[k] + lengtht[t];					
+						}
+						if(i==5)
+						{
+							socialStudiesTime[k] = socialStudiesTime[k] + lengtht[t];					
+						}
+						if(i==6)
+						{
+							physedTime[k] = physedTime[k] + lengtht[t];					
+						}
+						if(i==7)
+						{
+							frenchTime[k] = frenchTime[k] + lengtht[t];					
+						}
+						if(i==prepSubject)
+						{
+							prepTime[j] = prepTime[j] + lengtht[t];						
+						}						
 						else
 						{
 							teachTime[j] = teachTime[j] + lengtht[t];						
