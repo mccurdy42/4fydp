@@ -19,7 +19,7 @@ float FTE[r2] = [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.5,0.5]; //allocation arra
 //k= cohort
 int N3=9;
 range r3 = 1..N3;
-range class = 1..8;
+range class = 1..(N3-1);
 int prepCohort = N3;
 
 //t = time
