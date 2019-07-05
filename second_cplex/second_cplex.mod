@@ -14,7 +14,9 @@ int prepSubject = N;
 //j = teacher
 int N2=11;
 range r2 = 1..N2;
-float FTE[r2] = [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.5,0.5]; //allocation array for the FTE distribution
+float FTE[r2] = [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.7,1.0]; //allocation array for the FTE distribution
+//french indicator
+range french = (N2-1)..N2;
 
 //k= cohort
 int N3=9;
@@ -106,7 +108,7 @@ subject to //constraints are declared below
 	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] <= 200;
 	
 	//French
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[7,j,k,t] >= 200;
+	forall(k in class) sum(j in french, t in r4) lengtht[t]*x[7,j,k,t] >= 200;
 	
 	//prep
 	forall(j in r2) sum(t in r4) lengtht[t]*x[prepSubject,j,prepCohort,t] >= prep[j];
