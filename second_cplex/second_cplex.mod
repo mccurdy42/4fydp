@@ -12,13 +12,14 @@ string subj[r1] = ["Math", "Language","Science", "Art", "Social Studies", "Phys-
 int prepSubject = N;
 
 //j = teacher
-int N2=3;
+int N2=11;
 range r2 = 1..N2;
+float FTE[r2] = [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.5,0.5]; //allocation array for the FTE distribution
 
 //k= cohort
-int N3=3;
+int N3=9;
 range r3 = 1..N3;
-range class = 1..2;
+range class = 1..8;
 int prepCohort = N3;
 
 //t = time
@@ -30,15 +31,29 @@ range day4 = 19..24;
 range day5 = 25..30;
 
 range r4 = 1..N4;
+int basePrepTime = 240;
+int totalTime = 1500;
 
+float totalTeacherMin[r2];
+float prep[r2];
+float teachMin[r2];
+
+execute {
+
+	for(var j in r2)
+	{
+	totalTeacherMin[j]= FTE[j] * totalTime;
+	prep[j] = FTE[j]*basePrepTime; //prep time allocation
+	teachMin[j] = totalTeacherMin[j]-prep[j]; //teaching minute allocation
+	}
+
+}
 // Problem parameters are defined below
-int prep[r2]= [240,240,120]; //prep time array
 int lengtht[r4]= [40,60,50,50,60,40,
 				 40,60,50,50,60,40,
 				 40,60,50,50,60,40,
 				 40,60,50,50,60,40,
 				 40,60,50,50,60,40];   
-int teachMin[r2]=[1260,1260,630];
 int rijkt = 1;
 
 //decision variables
