@@ -61,6 +61,10 @@ int lengtht[r4]= [40,60,50,50,60,40,
 				 40,60,50,50,60,40,
 				 40,60,50,50,60,40];   
 
+int teachMin[r2]=[1260,1260,630];
+float FTE[r2]= [1.0,1.0,0.5];
+float totalTeacherMin[r2];
+int totalTime = 1500;
 
 execute {
 
