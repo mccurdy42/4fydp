@@ -5,11 +5,14 @@
  *********************************************/
 //this is the intial assignment problem
 //i=subject
-int N=8; 
+//9 because 7 subjects 2 dummies
+
+int N=9; 
 range r1 = 1..N; 
 range subjects = 1..7;
-string subj[r1] = ["Math", "Language","Science", "Art", "Social Studies", "Phys-Ed", "French", "Prep"];
+string subj[r1] = ["Math", "Language","Science", "Art", "Social Studies", "Phys-Ed", "French", "Away", "Prep"];
 int prepSubject = N;
+int awaySubject = N-1;
 
 //j = teacher
 int N2=11;
@@ -19,10 +22,12 @@ float FTE[r2] = [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.7,1.0]; //allocation arra
 range french = (N2-1)..N2;
 
 //k= cohort
-int N3=9;
+//4 because 2 cohorts, 2 dummies
+int N3=4;
 range r3 = 1..N3;
 range class = 1..(N3-1);
 int prepCohort = N3;
+int awayCohort = N3-1;
 
 //t = time
 int N4=30;
@@ -31,7 +36,6 @@ range day2 = 7..12;
 range day3 = 13..18;
 range day4 = 19..24;
 range day5 = 25..30;
-
 range r4 = 1..N4;
 int basePrepTime = 240;
 int totalTime = 1500;
@@ -56,6 +60,21 @@ int lengtht[r4]= [40,60,50,50,60,40,
 				 40,60,50,50,60,40,
 				 40,60,50,50,60,40,
 				 40,60,50,50,60,40];   
+
+int teachMin[r2]=[1260,1260,630];
+float FTE[r2]= [1.0,1.0,0.5];
+float totalTeacherMin[r2];
+int totalTime = 1500;
+
+execute {
+
+	for(var j in r2)
+	{
+	totalTeacherMin[j]= FTE[j] * totalTime;
+	}
+
+}
+
 int rijkt = 1;
 
 //decision variables
@@ -77,6 +96,9 @@ subject to //constraints are declared below
 	
 	//assignment3- each cohort assigned to 12 time periods
 	forall(k in class) sum(i in subjects, j in r2, t in r4)x[i,j,k,t] == 30;
+	
+	//schedule part time teachers away time
+	forall(j in r2) sum(t in r4)lengtht[t]*x[awaySubject,j,awayCohort,t] >= totalTime - totalTeacherMin[j];
 	
 	//math
 	forall(k in class) sum(j in r2, t in day1) lengtht[t]*x[1,j,k,t] == 60;
@@ -126,7 +148,7 @@ int physedTime[class];
 int frenchTime[class];
 int prepTime[r2];
 int teachTime[r2];
-
+int awayTime[r2];
 
 execute
 {
@@ -173,9 +195,13 @@ execute
 						{
 							prepTime[j] = prepTime[j] + lengtht[t];						
 						}						
+						else if(i==awaySubject)
+						{
+							awayTime[j] = awayTime[j] + lengtht[t];					
+						}
 						else
 						{
-							teachTime[j] = teachTime[j] + lengtht[t];						
+							teachTime[j] = teachTime[j] + lengtht[t];		
 						}
    					}						
 				}			
