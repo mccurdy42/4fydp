@@ -87,6 +87,7 @@ execute {
 }
 
 int rijkt = 1;
+int gymCap = 1;
 
 //decision variables
 dvar boolean x[r1][r2][r3][r4]; //x is the binary location variable, 'boolean' defines a binary variable
@@ -151,6 +152,9 @@ subject to //constraints are declared below
 	
 	//teaching mins
 	forall(j in r2) sum(t in r4, i in subjects, k in class) lengtht[t]*x[i,j,k,t] <= teachMin[j];
+	
+	//gym capacity
+	forall(t in r4) sum(j in r2, k in r3)x[6,j,k,t] <= gymCap;
 }
 
 int mathTime[class];
