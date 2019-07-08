@@ -13,6 +13,7 @@ range subjects = 1..7;
 string subj[r1] = ["Math", "Language","Science", "Art", "Social Studies", "Phys-Ed", "French", "Away", "Prep"];
 int prepSubject = N;
 int awaySubject = N-1;
+range subjectRange = N..N;
 
 //j = teacher
 int N2=11;
@@ -28,6 +29,7 @@ range r3 = 1..N3;
 range class = 1..(N3-1);
 int prepCohort = N3;
 int awayCohort = N3-1;
+range cohortRange = N3..N3;
 
 //t = time
 int N4=30;
@@ -43,6 +45,19 @@ int totalTime = 1500;
 float totalTeacherMin[r2];
 float prep[r2];
 float teachMin[r2];
+
+//time periods teachers are available- this will need to be automated from the user input
+int availableTime[r2][r4]= [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]];
 
 execute {
 
@@ -72,6 +87,7 @@ execute {
 }
 
 int rijkt = 1;
+int gymCap = 1;
 
 //decision variables
 dvar boolean x[r1][r2][r3][r4]; //x is the binary location variable, 'boolean' defines a binary variable
@@ -86,6 +102,9 @@ subject to //constraints are declared below
 	
 	//teacher can only teach one subject/class at a time- new constraint
 	forall(j in r2, t in r4) sum(i in r1, k in r3)x[i,j,k,t] == 1;
+	
+	//teacher can only teach one subject/class at a time - make this only for prep and teaching periods
+	forall(j in r2, t in r4) sum(i in subjects, k in class)x[i,j,k,t] + sum(i in subjectRange, k in cohortRange)x[i,j,k,t]  == 1* availableTime[j][t];
 	
 	//assignment2 - at every time, each cohort needs only one teacher and one subject
 	forall(k in class, t in r4) sum(i in subjects, j in r2)x[i,j,k,t] == 1;
@@ -133,6 +152,9 @@ subject to //constraints are declared below
 	
 	//teaching mins
 	forall(j in r2) sum(t in r4, i in subjects, k in class) lengtht[t]*x[i,j,k,t] <= teachMin[j];
+	
+	//gym capacity
+	forall(t in r4) sum(j in r2, k in r3)x[6,j,k,t] <= gymCap;
 }
 
 int mathTime[class];
