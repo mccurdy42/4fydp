@@ -36,6 +36,9 @@ range cohortRange = N3..N3;
 //t = time
 int N4=30;
 range day1 = 1..6;
+range d1 = 1..2;
+range d2 = 3..4;
+range d3 = 5..6;
 range numDays = 1..5;
 range day2 = 7..12;
 range day3 = 13..18;
@@ -97,6 +100,7 @@ int gymCap = 2;
 dvar boolean x[r1][r2][r3][r4]; //x is the binary location variable, 'boolean' defines a binary variable
 dvar int u[r2][numDays]; //slack variable for prep
 dvar int v[r2][numDays]; //surplus variable for prep
+dvar boolean y[r2][primary][day1];
 
 //objective function
 maximize  sum(i in r1,j in r2, k in r3, t in r4)(rijkt)*x[i,j,k,t] - (sum(j in r2, d in numDays)pjd*u[j][d] + sum(j in r2, d in numDays)pjd*v[j][d]); //objective function in minimization type
@@ -129,11 +133,17 @@ subject to //constraints are declared below
 	forall(k in class) sum(j in r2, t in day5) lengtht[t]*x[1,j,k,t] == 60;
 	
 	//language for primary cohorts
+	
+	/*forall(k in primary) sum(j in r2, t in d1) lengtht[t]*x[2,j,k,t] - y[j][k][t]*100 == 0;
+	forall(k in primary) sum(j in r2, t in d2) lengtht[t]*x[2,j,k,t] - y[j][k][t]*100 == 0;
+	forall(k in primary) sum(j in r2, t in d3) lengtht[t]*x[2,j,k,t] - y[j][k][t]*100 == 0;*/
 	forall(k in primary) sum(j in r2, t in day1) lengtht[t]*x[2,j,k,t] == 100;
 	forall(k in primary) sum(j in r2, t in day2) lengtht[t]*x[2,j,k,t] == 100;
 	forall(k in primary) sum(j in r2, t in day3) lengtht[t]*x[2,j,k,t] == 100;
 	forall(k in primary) sum(j in r2, t in day4) lengtht[t]*x[2,j,k,t] == 100;
 	forall(k in primary) sum(j in r2, t in day5) lengtht[t]*x[2,j,k,t] == 100;
+	
+	//forall(k in primary) sum(j in r2,t in day1) y[j][k][t]==1;
 	
 	//language for french applicable cohorts
 	forall(k in frenchCohorts) sum(j in r2, t in r4) lengtht[t]*x[2,j,k,t] >= 300;
