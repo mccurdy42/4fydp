@@ -26,9 +26,9 @@ range french = (N2-1)..N2;
 //4 because 2 cohorts, 2 dummies
 int N3=8;
 range r3 = 1..N3;
-range primary = 1..(N3-4);
-range frenchCohorts = (N3-3)..(N3-1);
-range class = 1..(N3-1);
+range primary = 1..(N3-5);
+range frenchCohorts = (N3-4)..(N3-2);
+range class = 1..(N3-2);
 int prepCohort = N3;
 int awayCohort = N3-1;
 range cohortRange = N3..N3;
@@ -129,11 +129,11 @@ subject to //constraints are declared below
 	forall(k in class) sum(j in r2, t in day5) lengtht[t]*x[1,j,k,t] == 60;
 	
 	//language for primary cohorts
-	forall(k in primary) sum(j in r2, t in day1) lengtht[t]*x[2,j,k,t] >= 100;
-	forall(k in primary) sum(j in r2, t in day2) lengtht[t]*x[2,j,k,t] >= 100;
-	forall(k in primary) sum(j in r2, t in day3) lengtht[t]*x[2,j,k,t] >= 100;
-	forall(k in primary) sum(j in r2, t in day4) lengtht[t]*x[2,j,k,t] >= 100;
-	forall(k in primary) sum(j in r2, t in day5) lengtht[t]*x[2,j,k,t] >= 100;
+	forall(k in primary) sum(j in r2, t in day1) lengtht[t]*x[2,j,k,t] == 100;
+	forall(k in primary) sum(j in r2, t in day2) lengtht[t]*x[2,j,k,t] == 100;
+	forall(k in primary) sum(j in r2, t in day3) lengtht[t]*x[2,j,k,t] == 100;
+	forall(k in primary) sum(j in r2, t in day4) lengtht[t]*x[2,j,k,t] == 100;
+	forall(k in primary) sum(j in r2, t in day5) lengtht[t]*x[2,j,k,t] == 100;
 	
 	//language for french applicable cohorts
 	forall(k in frenchCohorts) sum(j in r2, t in r4) lengtht[t]*x[2,j,k,t] >= 300;
