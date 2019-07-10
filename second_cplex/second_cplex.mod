@@ -24,7 +24,7 @@ range french = (N2-1)..N2;
 
 //k= cohort
 //4 because 2 cohorts, 2 dummies
-int N3=4;
+int N3=8;
 range r3 = 1..N3;
 range class = 1..(N3-1);
 int prepCohort = N3;
@@ -34,6 +34,7 @@ range cohortRange = N3..N3;
 //t = time
 int N4=30;
 range day1 = 1..6;
+range numDays = 1..5;
 range day2 = 7..12;
 range day3 = 13..18;
 range day4 = 19..24;
@@ -87,13 +88,16 @@ execute {
 }
 
 int rijkt = 1;
-int gymCap = 1;
+int pjd = 50; //penalty value for deviating from days with more or less than period of prep
+int gymCap = 2;
 
 //decision variables
 dvar boolean x[r1][r2][r3][r4]; //x is the binary location variable, 'boolean' defines a binary variable
+dvar int u[r2][numDays];
+dvar int v[r2][numDays];
 
 //objective function
-maximize  sum(i in r1,j in r2, k in r3, t in r4)(rijkt)*x[i,j,k,t]; //objective function in minimization type
+maximize  sum(i in r1,j in r2, k in r3, t in r4)(rijkt)*x[i,j,k,t] - (sum(j in r2, d in numDays)pjd*u[j][d] + sum(j in r2, d in numDays)pjd*v[j][d]); //objective function in minimization type
 
 subject to //constraints are declared below
 {	
@@ -155,6 +159,17 @@ subject to //constraints are declared below
 	
 	//gym capacity
 	forall(t in r4) sum(j in r2, k in r3)x[6,j,k,t] <= gymCap;
+	
+	//prep time objective - minimize # of times teachers have prep on the same day
+	forall(j in r2) sum(t in day1)x[prepSubject,j,prepCohort,t] + u[j][1] -v[j][1] == 1;
+	forall(j in r2) sum(t in day2)x[prepSubject,j,prepCohort,t] + u[j][2] -v[j][2] == 1;
+	forall(j in r2) sum(t in day3)x[prepSubject,j,prepCohort,t] + u[j][3] -v[j][3] == 1;
+	forall(j in r2) sum(t in day4)x[prepSubject,j,prepCohort,t] + u[j][4] -v[j][4] == 1;
+	forall(j in r2) sum(t in day5)x[prepSubject,j,prepCohort,t] + u[j][5] -v[j][5] == 1;
+	
+	forall(j in r2, d in numDays) u[j][d] >= 0;
+	forall(j in r2, d in numDays) v[j][d] >= 0;
+
 }
 
 int mathTime[class];
