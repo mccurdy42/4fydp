@@ -10,7 +10,7 @@
 int N=9; 
 range r1 = 1..N; 
 range subjects = 1..7;
-string subj[r1] = ["Math", "Language","Science", "Art", "Social Studies", "Phys-Ed", "French", "Away", "Prep"];
+string subj[r1] = ["Math", "Language","Science", "Art", "Social-Studies", "Phys-Ed", "French", "Away", "Prep"];
 int prepSubject = N;
 int awaySubject = N-1;
 range subjectRange = N..N;
@@ -185,6 +185,8 @@ int awayTime[r2];
 
 execute
 {
+writeln("Teacher ","Cohort ", "Subject ","Period ");
+
 	for(var t in r4)
 	{
 		for(var i in r1)
@@ -195,7 +197,7 @@ execute
 				{
 					if(x[i][j][k][t]==1)
 					{
-						writeln("Teacher", j," teaches cohort: ", k, " ", subj[i], " during period ", t);
+						writeln(j," ", k," ", subj[i]," ", t);
 						if(i==1)
 						{
 							mathTime[k]= mathTime[k]+ lengtht[t];					
