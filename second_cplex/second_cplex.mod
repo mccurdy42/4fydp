@@ -26,6 +26,8 @@ range french = (N2-1)..N2;
 //4 because 2 cohorts, 2 dummies
 int N3=8;
 range r3 = 1..N3;
+range primary = 1..(N3-4);
+range frenchCohorts = (N3-3)..(N3-1);
 range class = 1..(N3-1);
 int prepCohort = N3;
 int awayCohort = N3-1;
@@ -93,8 +95,8 @@ int gymCap = 2;
 
 //decision variables
 dvar boolean x[r1][r2][r3][r4]; //x is the binary location variable, 'boolean' defines a binary variable
-dvar int u[r2][numDays];
-dvar int v[r2][numDays];
+dvar int u[r2][numDays]; //slack variable for prep
+dvar int v[r2][numDays]; //surplus variable for prep
 
 //objective function
 maximize  sum(i in r1,j in r2, k in r3, t in r4)(rijkt)*x[i,j,k,t] - (sum(j in r2, d in numDays)pjd*u[j][d] + sum(j in r2, d in numDays)pjd*v[j][d]); //objective function in minimization type
@@ -126,13 +128,15 @@ subject to //constraints are declared below
 	forall(k in class) sum(j in r2, t in day4) lengtht[t]*x[1,j,k,t] == 60;
 	forall(k in class) sum(j in r2, t in day5) lengtht[t]*x[1,j,k,t] == 60;
 	
-	//language
-	/*forall(k in class) sum(j in r2, t in day1) lengtht[t]*x[2,j,k,t] >= 100;
-	forall(k in class) sum(j in r2, t in day2) lengtht[t]*x[2,j,k,t] >= 100;
-	forall(k in class) sum(j in r2, t in day3) lengtht[t]*x[2,j,k,t] >= 100;
-	forall(k in class) sum(j in r2, t in day4) lengtht[t]*x[2,j,k,t] >= 100;
-	forall(k in class) sum(j in r2, t in day5) lengtht[t]*x[2,j,k,t] >= 100;*/
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[2,j,k,t] >= 300;
+	//language for primary cohorts
+	forall(k in primary) sum(j in r2, t in day1) lengtht[t]*x[2,j,k,t] >= 100;
+	forall(k in primary) sum(j in r2, t in day2) lengtht[t]*x[2,j,k,t] >= 100;
+	forall(k in primary) sum(j in r2, t in day3) lengtht[t]*x[2,j,k,t] >= 100;
+	forall(k in primary) sum(j in r2, t in day4) lengtht[t]*x[2,j,k,t] >= 100;
+	forall(k in primary) sum(j in r2, t in day5) lengtht[t]*x[2,j,k,t] >= 100;
+	
+	//language for french applicable cohorts
+	forall(k in frenchCohorts) sum(j in r2, t in r4) lengtht[t]*x[2,j,k,t] >= 300;
 	
 	//science
 	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] >= 100;
@@ -148,8 +152,8 @@ subject to //constraints are declared below
 	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] >= 150;
 	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] <= 200;
 	
-	//French
-	forall(k in class) sum(j in french, t in r4) lengtht[t]*x[7,j,k,t] >= 200;
+	//French for only applicable classes
+	forall(k in frenchCohorts) sum(j in french, t in r4) lengtht[t]*x[7,j,k,t] >= 200;
 	
 	//prep
 	forall(j in r2) sum(t in r4) lengtht[t]*x[prepSubject,j,prepCohort,t] >= prep[j];
