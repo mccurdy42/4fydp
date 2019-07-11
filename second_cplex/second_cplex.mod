@@ -26,7 +26,7 @@ range french = (N2-1)..N2;
 //4 because 2 cohorts, 2 dummies
 int N3=8;
 range r3 = 1..N3;
-range class = 1..(N3-1);
+range class = 1..(N3-2);
 int prepCohort = N3;
 int awayCohort = N3-1;
 range cohortRange = N3..N3;
@@ -77,6 +77,7 @@ int lengtht[r4]= [40,60,50,50,60,40,
 				 40,60,50,50,60,40,
 				 40,60,50,50,60,40];   
 
+int rewards[class][r2][subjects];
 
 execute {
 
@@ -84,12 +85,51 @@ execute {
 	{
 	totalTeacherMin[j]= FTE[j] * totalTime;
 	}
+	
+	
+
+
+	
+// 	for(m in class)
+// 	{
+//		for(j in r2){
+//			for(i in subjects){
+//			rewards[k][j][i] = 0;
+//		}	
+//	}
+//
+//
+//	}
+}
+//base reward value
+int rijkt = 1;
+
+//defined reward 
+//int rewards[class][r2] = [[100,0,0,0,0,0,10,10,0,0,0],
+//						 [0,100,0,0,0,0,10,10,0,0,0],
+//						 [0,0,100,0,0,0,10,10,0,0,0],
+//						 [0,0,0,100,0,0,0,0,10,0,0],
+//						 [0,0,0,0,100,0,0,0,10,0,0],
+//		    			 [0,0,0,0,0,100,0,0,10,0,0]];
+
+
+
+execute {
+//for(k in 6){
+//	for (j in 6){
+//		if ( k == j){
+//		rewards[k][j] = [100,100,100,100,100,-1];	
+//		}
+//	}  						
+
 
 }
 
-int rijkt = 1;
+
+
 int pjd = 50; //penalty value for deviating from days with more or less than period of prep
 int gymCap = 2;
+
 
 //decision variables
 dvar boolean x[r1][r2][r3][r4]; //x is the binary location variable, 'boolean' defines a binary variable
@@ -97,7 +137,7 @@ dvar int u[r2][numDays];
 dvar int v[r2][numDays];
 
 //objective function
-maximize  sum(i in r1,j in r2, k in r3, t in r4)(rijkt)*x[i,j,k,t] - (sum(j in r2, d in numDays)pjd*u[j][d] + sum(j in r2, d in numDays)pjd*v[j][d]); //objective function in minimization type
+maximize  sum(i in subjects,j in r2, k in class, t in r4)(rewards[k][j][i])*x[i,j,k,t] - (sum(j in r2, d in numDays)pjd*u[j][d] + sum(j in r2, d in numDays)pjd*v[j][d]); //objective function in minimization type
 
 subject to //constraints are declared below
 {	
