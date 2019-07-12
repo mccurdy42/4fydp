@@ -26,7 +26,9 @@ range french = (N2-1)..N2;
 //4 because 2 cohorts, 2 dummies
 int N3=8;
 range r3 = 1..N3;
+int teachingCohort = N3-2;
 range class = 1..(N3-2);
+range teaching_class = 1..teachingCohort;
 int prepCohort = N3;
 int awayCohort = N3-1;
 range cohortRange = N3..N3;
@@ -77,7 +79,7 @@ int lengtht[r4]= [40,60,50,50,60,40,
 				 40,60,50,50,60,40,
 				 40,60,50,50,60,40];   
 
-int rewards[class][r2][subjects];
+
 
 execute {
 
@@ -86,42 +88,42 @@ execute {
 	totalTeacherMin[j]= FTE[j] * totalTime;
 	}
 	
-	
-
-
-	
-// 	for(m in class)
-// 	{
-//		for(j in r2){
-//			for(i in subjects){
-//			rewards[k][j][i] = 0;
-//		}	
-//	}
-//
-//
-//	}
 }
-//base reward value
-int rijkt = 1;
 
-//defined reward 
-//int rewards[class][r2] = [[100,0,0,0,0,0,10,10,0,0,0],
-//						 [0,100,0,0,0,0,10,10,0,0,0],
-//						 [0,0,100,0,0,0,10,10,0,0,0],
-//						 [0,0,0,100,0,0,0,0,10,0,0],
-//						 [0,0,0,0,100,0,0,0,10,0,0],
-//		    			 [0,0,0,0,0,100,0,0,10,0,0]];
+//defining an initial reward matrix
+int rewards[teaching_class][r2][subjects];
 
+execute{
+//this populates the reward matrix with a home room model with 1 gym teacher and 1 art teacher   						
+for(var k in teaching_class){
+	for (var j in r2){
+		for(var i in subjects ){		
+			if (k == j ){
+				rewards[k][j][i] = 100;  						
+			} else if ((k == 1|| k == 2 || k ==3 ) && j == 7) {
+				//teacher 7 teaches art specialty
+				if (i==4){
+					rewards[k][j][i] = 200; 							
+  				 } else {
+  				   	rewards[k][j][i] = 10;			 
+  				 }					
+			} else if ((k == 1|| k == 2 || k ==3 ) && j == 8){
+				//teacher 8 teaches gym specialty
+				if (i==6){
+					rewards[k][j][i] = 200; 							
+  				 } else {
+  				   	rewards[k][j][i] = 10;			 
+  				 }		
+			} else if ((k == 4|| k == 5 || k == 6 ) && j == 9){
+				//9 is a generalist 
+				rewards[k][j][i] = 10;		
+			}else {
+				rewards[k][j][i] = 0; 		
+			}
+		}		
+	}
 
-
-execute {
-//for(k in 6){
-//	for (j in 6){
-//		if ( k == j){
-//		rewards[k][j] = [100,100,100,100,100,-1];	
-//		}
-//	}  						
-
+}
 
 }
 
