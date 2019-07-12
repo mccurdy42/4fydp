@@ -233,7 +233,7 @@ int awayTime[r2];
 
 execute
 {
-writeln("Teacher ","Cohort ", "Subject ","Period ");
+writeln("Teacher ","Cohort ", "Subject ","Period ", "Day ");
 
 	for(var t in r4)
 	{
@@ -245,7 +245,33 @@ writeln("Teacher ","Cohort ", "Subject ","Period ");
 				{
 					if(x[i][j][k][t]==1)
 					{
-						writeln(j," ", k," ", subj[i]," ", t);
+						write("Teacher", j," ", k," ", subj[i]," ", t);
+						
+						if(t >=1 && t <= 6)
+						{
+							writeln(" Day1");					
+						}
+						
+						if(t >=7 && t <= 12)
+						{
+							writeln(" Day2");							
+						}
+						
+							if(t >=13 && t <= 18)
+						{
+							writeln(" Day3");							
+						}
+						
+						if(t >=19 && t <= 24)
+						{						
+						writeln(" Day4");							
+						}
+						
+						if(t >= 25 && t <= 30)
+						{
+							writeln(" Day5");								
+						}
+						
 						if(i==1)
 						{
 							mathTime[k]= mathTime[k]+ lengtht[t];					
