@@ -10,7 +10,7 @@
 int N=9; 
 range r1 = 1..N; 
 range subjects = 1..7;
-string subj[r1] = ["Math", "Language","Science", "Art", "Social Studies", "Phys-Ed", "French", "Away", "Prep"];
+string subj[r1] = ["Math", "Language","Science", "Art", "Social-Studies", "Phys-Ed", "French", "Away", "Prep"];
 int prepSubject = N;
 int awaySubject = N-1;
 range subjectRange = N..N;
@@ -26,9 +26,13 @@ range french = (N2-1)..N2;
 //4 because 2 cohorts, 2 dummies
 int N3=8;
 range r3 = 1..N3;
+
 int teachingCohort = N3-2;
-range class = 1..(N3-2);
 range teaching_class = 1..teachingCohort;
+range primary = 1..(N3-5);
+range frenchCohorts = (N3-4)..(N3-2);
+range class = 1..(N3-2);
+
 int prepCohort = N3;
 int awayCohort = N3-1;
 range cohortRange = N3..N3;
@@ -135,8 +139,8 @@ int gymCap = 2;
 
 //decision variables
 dvar boolean x[r1][r2][r3][r4]; //x is the binary location variable, 'boolean' defines a binary variable
-dvar int u[r2][numDays];
-dvar int v[r2][numDays];
+dvar int u[r2][numDays]; //slack variable for prep
+dvar int v[r2][numDays]; //surplus variable for prep
 
 //objective function
 maximize  sum(i in subjects,j in r2, k in class, t in r4)(rewards[k][j][i])*x[i,j,k,t] - (sum(j in r2, d in numDays)pjd*u[j][d] + sum(j in r2, d in numDays)pjd*v[j][d]); //objective function in minimization type
@@ -168,13 +172,15 @@ subject to //constraints are declared below
 	forall(k in class) sum(j in r2, t in day4) lengtht[t]*x[1,j,k,t] == 60;
 	forall(k in class) sum(j in r2, t in day5) lengtht[t]*x[1,j,k,t] == 60;
 	
-	//language
-	/*forall(k in class) sum(j in r2, t in day1) lengtht[t]*x[2,j,k,t] >= 100;
-	forall(k in class) sum(j in r2, t in day2) lengtht[t]*x[2,j,k,t] >= 100;
-	forall(k in class) sum(j in r2, t in day3) lengtht[t]*x[2,j,k,t] >= 100;
-	forall(k in class) sum(j in r2, t in day4) lengtht[t]*x[2,j,k,t] >= 100;
-	forall(k in class) sum(j in r2, t in day5) lengtht[t]*x[2,j,k,t] >= 100;*/
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[2,j,k,t] >= 300;
+	//language for primary cohorts
+	forall(k in primary) sum(j in r2, t in day1) lengtht[t]*x[2,j,k,t] == 100;
+	forall(k in primary) sum(j in r2, t in day2) lengtht[t]*x[2,j,k,t] == 100;
+	forall(k in primary) sum(j in r2, t in day3) lengtht[t]*x[2,j,k,t] == 100;
+	forall(k in primary) sum(j in r2, t in day4) lengtht[t]*x[2,j,k,t] == 100;
+	forall(k in primary) sum(j in r2, t in day5) lengtht[t]*x[2,j,k,t] == 100;
+	
+	//language for french applicable cohorts
+	forall(k in frenchCohorts) sum(j in r2, t in r4) lengtht[t]*x[2,j,k,t] >= 300;
 	
 	//science
 	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] >= 100;
@@ -190,8 +196,8 @@ subject to //constraints are declared below
 	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] >= 150;
 	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] <= 200;
 	
-	//French
-	forall(k in class) sum(j in french, t in r4) lengtht[t]*x[7,j,k,t] >= 200;
+	//French for only applicable classes
+	forall(k in frenchCohorts) sum(j in french, t in r4) lengtht[t]*x[7,j,k,t] >= 200;
 	
 	//prep
 	forall(j in r2) sum(t in r4) lengtht[t]*x[prepSubject,j,prepCohort,t] >= prep[j];
@@ -227,6 +233,8 @@ int awayTime[r2];
 
 execute
 {
+writeln("Teacher ","Cohort ", "Subject ","Period ");
+
 	for(var t in r4)
 	{
 		for(var i in r1)
@@ -237,7 +245,7 @@ execute
 				{
 					if(x[i][j][k][t]==1)
 					{
-						writeln("Teacher", j," teaches cohort: ", k, " ", subj[i], " during period ", t);
+						writeln(j," ", k," ", subj[i]," ", t);
 						if(i==1)
 						{
 							mathTime[k]= mathTime[k]+ lengtht[t];					
