@@ -26,9 +26,13 @@ range french = (N2-1)..N2;
 //4 because 2 cohorts, 2 dummies
 int N3=8;
 range r3 = 1..N3;
+
+int teachingCohort = N3-2;
+range teaching_class = 1..teachingCohort;
 range primary = 1..(N3-5);
 range frenchCohorts = (N3-4)..(N3-2);
 range class = 1..(N3-2);
+
 int prepCohort = N3;
 int awayCohort = N3-1;
 range cohortRange = N3..N3;
@@ -80,18 +84,58 @@ int lengtht[r4]= [40,60,50,50,60,40,
 				 40,60,50,50,60,40];   
 
 
+
 execute {
 
 	for(var j in r2)
 	{
 	totalTeacherMin[j]= FTE[j] * totalTime;
 	}
+	
+}
+
+//defining an initial reward matrix
+int rewards[teaching_class][r2][subjects];
+
+execute{
+//this populates the reward matrix with a home room model with 1 gym teacher and 1 art teacher   						
+for(var k in teaching_class){
+	for (var j in r2){
+		for(var i in subjects ){		
+			if (k == j ){
+				rewards[k][j][i] = 100;  						
+			} else if ((k == 1|| k == 2 || k ==3 ) && j == 7) {
+				//teacher 7 teaches art specialty
+				if (i==4){
+					rewards[k][j][i] = 200; 							
+  				 } else {
+  				   	rewards[k][j][i] = 10;			 
+  				 }					
+			} else if ((k == 1|| k == 2 || k ==3 ) && j == 8){
+				//teacher 8 teaches gym specialty
+				if (i==6){
+					rewards[k][j][i] = 200; 							
+  				 } else {
+  				   	rewards[k][j][i] = 10;			 
+  				 }		
+			} else if ((k == 4|| k == 5 || k == 6 ) && j == 9){
+				//9 is a generalist 
+				rewards[k][j][i] = 10;		
+			}else {
+				rewards[k][j][i] = 0; 		
+			}
+		}		
+	}
 
 }
 
-int rijkt = 1;
+}
+
+
+
 int pjd = 50; //penalty value for deviating from days with more or less than period of prep
 int gymCap = 2;
+
 
 //decision variables
 dvar boolean x[r1][r2][r3][r4]; //x is the binary location variable, 'boolean' defines a binary variable
@@ -99,7 +143,7 @@ dvar int u[r2][numDays]; //slack variable for prep
 dvar int v[r2][numDays]; //surplus variable for prep
 
 //objective function
-maximize  sum(i in r1,j in r2, k in r3, t in r4)(rijkt)*x[i,j,k,t] - (sum(j in r2, d in numDays)pjd*u[j][d] + sum(j in r2, d in numDays)pjd*v[j][d]); //objective function in minimization type
+maximize  sum(i in subjects,j in r2, k in class, t in r4)(rewards[k][j][i])*x[i,j,k,t] - (sum(j in r2, d in numDays)pjd*u[j][d] + sum(j in r2, d in numDays)pjd*v[j][d]); //objective function in minimization type
 
 subject to //constraints are declared below
 {	
