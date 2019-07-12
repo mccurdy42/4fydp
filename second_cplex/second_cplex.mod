@@ -206,31 +206,26 @@ writeln("Teacher ","Cohort ", "Subject ","Period ", "Day ");
 						if(t >=1 && t <= 6)
 						{
 							writeln(" Day1");					
-    								
 						}
 						
 						if(t >=7 && t <= 12)
 						{
-							writeln(" Day2");					
-    								
+							writeln(" Day2");							
 						}
 						
 							if(t >=13 && t <= 18)
 						{
-							writeln(" Day3");					
-    								
+							writeln(" Day3");							
 						}
 						
 						if(t >=19 && t <= 24)
-						{
-							writeln(" Day4");					
-    								
+						{						
+						writeln(" Day4");							
 						}
 						
 						if(t >= 25 && t <= 30)
 						{
-							writeln(" Day5");					
-    								
+							writeln(" Day5");								
 						}
 						
 						if(i==1)
