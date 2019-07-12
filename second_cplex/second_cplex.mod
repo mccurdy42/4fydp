@@ -142,13 +142,22 @@ int gymCap = 2;
 
 //decision variables
 dvar boolean x[r1][r2][r3][r4]; //x is the binary location variable, 'boolean' defines a binary variable
-dvar int u[r2][numDays]; //slack variable for prep
-dvar int v[r2][numDays]; //surplus variable for prep
+dvar int u1[r2][numDays]; //slack variable for prep
+dvar int v1[r2][numDays]; //surplus variable for prep
 dvar boolean a[primary][blockCount];
+dvar boolean b[1..1][r4]; //indicator variable if prep is assigned at time t - only assigned to 1 group of teachers (1 and 2) for now
+dvar int u2[1..1][r4]; //slack and surplus for prep time objective to schedule prep at same time - one group 
+dvar int v2[1..1][r4]; 
+dvar int u3[class];
+dvar int u4[class];
+dvar int u5[class];
+dvar int u6[class];
 
 //objective function
-maximize  sum(i in subjects,j in r2, k in class, t in r4)(rewards[k][j][i])*x[i,j,k,t] - (sum(j in r2, d in numDays)pjd*u[j][d] + sum(j in r2, d in numDays)pjd*v[j][d]); //objective function in minimization type
-
+maximize  sum(i in subjects,j in r2, k in class, t in r4)(rewards[k][j][i])*x[i,j,k,t]
+	- (sum(j in r2, d in numDays)pjd*u1[j][d] + sum(j in r2, d in numDays)pjd*v1[j][d]) 
+	- (sum(j in 1..1, t in r4)50*u2[j][t] + sum(j in 1..1, t in r4)50*v2[j][t]) 
+ 	- sum(k in class)50*(u3[k] + u4[k] + u5[k] +u6[k]);
 subject to //constraints are declared below
 {	
 	//assignment1- only 1 teacher assigned to a cohort and subject at a time-fixed constr
@@ -187,18 +196,18 @@ subject to //constraints are declared below
 	forall(k in frenchCohorts) sum(j in r2, t in r4) lengtht[t]*x[2,j,k,t] >= 300;
 	
 	//science
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] >= 100;
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] <= 150;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] + u3[k] == 100;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t]  <= 150;
 	
 	//art
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[4,j,k,t] >= 300;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[4,j,k,t] + u4[k] == 300;
 	
 	//Social Studies
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[5,j,k,t] >= 100;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[5,j,k,t] + u5[k] == 100;
 	
 	//Phys-ed
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] >= 150;
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] <= 200;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] + u6[k] == 150;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t]  <= 200;
 	
 	//French for only applicable classes
 	forall(k in frenchCohorts) sum(j in french, t in r4) lengtht[t]*x[7,j,k,t] >= 200;
@@ -213,19 +222,30 @@ subject to //constraints are declared below
 	forall(t in r4) sum(j in r2, k in r3)x[6,j,k,t] <= gymCap;
 	
 	//prep time objective - minimize # of times teachers have prep on the same day
-	forall(j in r2) sum(t in day1)x[prepSubject,j,prepCohort,t] + u[j][1] -v[j][1] == 1;
-	forall(j in r2) sum(t in day2)x[prepSubject,j,prepCohort,t] + u[j][2] -v[j][2] == 1;
-	forall(j in r2) sum(t in day3)x[prepSubject,j,prepCohort,t] + u[j][3] -v[j][3] == 1;
-	forall(j in r2) sum(t in day4)x[prepSubject,j,prepCohort,t] + u[j][4] -v[j][4] == 1;
-	forall(j in r2) sum(t in day5)x[prepSubject,j,prepCohort,t] + u[j][5] -v[j][5] == 1;
+	forall(j in r2) sum(t in day1)x[prepSubject,j,prepCohort,t] + u1[j][1] -v1[j][1] == 1;
+	forall(j in r2) sum(t in day2)x[prepSubject,j,prepCohort,t] + u1[j][2] -v1[j][2] == 1;
+	forall(j in r2) sum(t in day3)x[prepSubject,j,prepCohort,t] + u1[j][3] -v1[j][3] == 1;
+	forall(j in r2) sum(t in day4)x[prepSubject,j,prepCohort,t] + u1[j][4] -v1[j][4] == 1;
+	forall(j in r2) sum(t in day5)x[prepSubject,j,prepCohort,t] + u1[j][5] -v1[j][5] == 1;
 	
-	forall(j in r2, d in numDays) u[j][d] >= 0;
-	forall(j in r2, d in numDays) v[j][d] >= 0;
+	forall(j in r2, d in numDays) u1[j][d] >= 0;
+	forall(j in r2, d in numDays) v1[j][d] >= 0;
+	
+	forall(j in 1..1, t in r4) u2[j][t] >= 0;
+	forall(j in 1..1, t in r4) v2[j][t] >= 0;
+	
+	forall(k in class) u3[k] >= 0;
+	forall(k in class) u4[k] >= 0;
+	forall(k in class) u5[k] >= 0;
+	forall(k in class) u6[k] >= 0;
 	
 	//language for primary has to be back to back
 	forall(d in numDays, k in primary) sum(j in r2)x[2,j,k,1 + (d-1)*6] + sum(j in r2)x[2,j,k,2 + (d-1)*6] == a[k][1 +3*(d-1)]*2;
 	forall(d in numDays, k in primary) sum(j in r2)x[2,j,k,3 + (d-1)*6] + sum(j in r2)x[2,j,k,4 + (d-1)*6] == a[k][2 +3*(d-1)]*2;
 	forall(d in numDays, k in primary) sum(j in r2)x[2,j,k,5 + (d-1)*6] + sum(j in r2)x[2,j,k,6 + (d-1)*6] == a[k][3 +3*(d-1)]*2;
+
+	//prep time at the same time for teachers teaching same cohort (just did teachers 1 and 2 for now)
+	forall(t in r4) x[prepSubject,1,prepCohort,t] + x[prepSubject,2,prepCohort,t] + u2[1][t] - v2[1][t] == 2*b[1][t] ;
 
 }
 
