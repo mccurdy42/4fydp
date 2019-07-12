@@ -53,6 +53,9 @@ float totalTeacherMin[r2];
 float prep[r2];
 float teachMin[r2];
 
+//blocks of time (ex 1,2 and 3,4)
+range blockCount = 1..15;
+
 //time periods teachers are available- this will need to be automated from the user input
 int availableTime[r2][r4]= [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -141,6 +144,7 @@ int gymCap = 2;
 dvar boolean x[r1][r2][r3][r4]; //x is the binary location variable, 'boolean' defines a binary variable
 dvar int u[r2][numDays]; //slack variable for prep
 dvar int v[r2][numDays]; //surplus variable for prep
+dvar boolean a[primary][blockCount];
 
 //objective function
 maximize  sum(i in subjects,j in r2, k in class, t in r4)(rewards[k][j][i])*x[i,j,k,t] - (sum(j in r2, d in numDays)pjd*u[j][d] + sum(j in r2, d in numDays)pjd*v[j][d]); //objective function in minimization type
@@ -217,6 +221,11 @@ subject to //constraints are declared below
 	
 	forall(j in r2, d in numDays) u[j][d] >= 0;
 	forall(j in r2, d in numDays) v[j][d] >= 0;
+	
+	//language for primary has to be back to back
+	forall(d in numDays, k in primary) sum(j in r2)x[2,j,k,1 + (d-1)*6] + sum(j in r2)x[2,j,k,2 + (d-1)*6] == a[k][1 +3*(d-1)]*2;
+	forall(d in numDays, k in primary) sum(j in r2)x[2,j,k,3 + (d-1)*6] + sum(j in r2)x[2,j,k,4 + (d-1)*6] == a[k][2 +3*(d-1)]*2;
+	forall(d in numDays, k in primary) sum(j in r2)x[2,j,k,5 + (d-1)*6] + sum(j in r2)x[2,j,k,6 + (d-1)*6] == a[k][3 +3*(d-1)]*2;
 
 }
 
