@@ -223,9 +223,9 @@ subject to //constraints are declared below
 	forall(j in r2, d in numDays) v[j][d] >= 0;
 	
 	//language for primary has to be back to back
-	forall(k in primary) sum(j in r2)x[2,j,k,1] + sum(j in r2)x[2,j,k,2] == a[k][1]*2;
-	forall(k in primary) sum(j in r2)x[2,j,k,3] + sum(j in r2)x[2,j,k,4] == a[k][2]*2;
-	forall(k in primary) sum(j in r2)x[2,j,k,5] + sum(j in r2)x[2,j,k,6] == a[k][3]*2;
+	forall(d in numDays, k in primary) sum(j in r2)x[2,j,k,1 + (d-1)*6] + sum(j in r2)x[2,j,k,2 + (d-1)*6] == a[k][1 +3*(d-1)]*2;
+	forall(d in numDays, k in primary) sum(j in r2)x[2,j,k,3 + (d-1)*6] + sum(j in r2)x[2,j,k,4 + (d-1)*6] == a[k][2 +3*(d-1)]*2;
+	forall(d in numDays, k in primary) sum(j in r2)x[2,j,k,5 + (d-1)*6] + sum(j in r2)x[2,j,k,6 + (d-1)*6] == a[k][3 +3*(d-1)]*2;
 
 }
 
