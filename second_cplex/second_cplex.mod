@@ -105,36 +105,7 @@ execute {
 int rewards[teaching_class][r2][subjects];
 
 execute{
-////this populates the reward matrix with a home room model with 1 gym teacher and 1 art teacher   						
-//for(var k in teaching_class){
-//	for (var j in r2){
-//		for(var i in subjects ){		
-//			if (k == j ){
-//				rewards[k][j][i] = 100;  						
-//			} else if ((k == 1|| k == 2 || k ==3 ) && j == 7) {
-//				//teacher 7 teaches art specialty
-//				if (i==4){
-//					rewards[k][j][i] = 200; 							
-//  				 } else {
-//  				   	rewards[k][j][i] = 10;			 
-//  				 }					
-//			} else if ((k == 1|| k == 2 || k ==3 ) && j == 8){
-//				//teacher 8 teaches gym specialty
-//				if (i==6){
-//					rewards[k][j][i] = 200; 							
-//  				 } else {
-//  				   	rewards[k][j][i] = 10;			 
-//  				 }		
-//			} else if ((k == 4|| k == 5 || k == 6 ) && j == 9){
-//				//9 is a generalist 
-//				rewards[k][j][i] = 10;		
-//			}else {
-//				rewards[k][j][i] = 0; 		
-//			}
-//		}		
-//	}
-//
-//}
+
 for(var k in teaching_class){
 	for (var j in r2){
 		for(var i in subjects ){		
