@@ -16,21 +16,22 @@ int awaySubject = N-1;
 range subjectRange = N..N;
 
 //j = teacher
-int N2=11;
+int N2=17;
 range r2 = 1..N2;
-float FTE[r2] = [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.7,1.0]; //allocation array for the FTE distribution
+float FTE[r2] = [1.0,1.0,1.0,1.0,0.7,1.0,1.0,1.0,1.0,1.0,1.0,0.2,0.2,0.6,0.2,0.3,1.0]; //allocation array for the FTE distribution
 //french indicator
 range french = (N2-1)..N2;
 
 //k= cohort
-//4 because 2 cohorts, 2 dummies
-int N3=8;
+//13 because 11 cohorts, 2 dummies
+int N3=13;
 range r3 = 1..N3;
 
 int teachingCohort = N3-2;
 range teaching_class = 1..teachingCohort;
-range primary = 1..(N3-5);
-range frenchCohorts = (N3-4)..(N3-2);
+
+range primary = 1..(N3-10);
+range frenchCohorts = (N3-9)..(N3-2);
 range class = 1..(N3-2);
 
 int prepCohort = N3;
@@ -61,12 +62,18 @@ int availableTime[r2][r4]= [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0],
+							[1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]];
 
 execute {
@@ -101,34 +108,90 @@ execute {
 int rewards[teaching_class][r2][subjects];
 
 execute{
-//this populates the reward matrix with a home room model with 1 gym teacher and 1 art teacher   						
+
 for(var k in teaching_class){
 	for (var j in r2){
 		for(var i in subjects ){		
-			if (k == j ){
-				rewards[k][j][i] = 100;  						
-			} else if ((k == 1|| k == 2 || k ==3 ) && j == 7) {
-				//teacher 7 teaches art specialty
-				if (i==4){
-					rewards[k][j][i] = 200; 							
-  				 } else {
-  				   	rewards[k][j][i] = 10;			 
-  				 }					
-			} else if ((k == 1|| k == 2 || k ==3 ) && j == 8){
-				//teacher 8 teaches gym specialty
-				if (i==6){
-					rewards[k][j][i] = 200; 							
-  				 } else {
-  				   	rewards[k][j][i] = 10;			 
-  				 }		
-			} else if ((k == 4|| k == 5 || k == 6 ) && j == 9){
-				//9 is a generalist 
-				rewards[k][j][i] = 10;		
-			}else {
-				rewards[k][j][i] = 0; 		
+			//homeroom 1	
+			if (k==1 && j==1){
+				rewards[k][j][i] = 100;		
 			}
-		}		
+			
+			else if (k ==2 && j ==2 ){
+				rewards[k][j][i] = 100;			
+			}
+			else if (k ==3 && j ==3 ){
+				rewards[k][j][i] = 100;			
+			}
+			else if (k ==4 && j ==4 ){
+				rewards[k][j][i] = 100;			
+			}
+			else if (k ==5 && j ==5 && (i == 4 || i == 2)){
+				rewards[k][j][i] = 200;	
+			}
+			else if ((k >=3 && k <= 6)  && j ==5 && i ==7){
+				rewards[k][j][i] = 200;	
+			}
+			else if ((k >=4 && k <= 6)  && j ==6 && (i != 2 && i <= 5 )){
+				rewards[k][j][i] = 100;	
+			}
+			else if ((k >=4 && k <= 6)  && j == 7  &&  i == 5 ){
+				rewards[k][j][i] = 100;	
+			}
+			else if (k == 7 && j == 7 && (i != 3 && i <= 6 )){
+				rewards[k][j][i] = 100;	
+			}
+			else if (k == 1 && j == 7){
+				rewards[k][j][i] = 10;	
+			}
+			else if (k == 8 && j == 8 && ((i ==2)|| i ==1 || i ==4 ||i ==6)){
+				rewards[k][j][i] = 10;	
+			}
+			else if ((k >=1 && k <= 3)  && j == 8 && i ==6 ){
+				rewards[k][j][i] = 10;	
+			}
+			else if (k==9  && j == 9 && i <=3 ){
+				rewards[k][j][i] = 10;	
+			}
+			else if ((k >=1 && k <= 3)  && j == 9 && i ==6 ){
+				rewards[k][j][i] = 10;	
+			}
+			else if (k==10  && j == 10 && i !=5 ){
+				rewards[k][j][i] = 100;	
+			}
+			else if ((k >=9 && k <= 11)  && j == 11 && i ==5 ){
+				rewards[k][j][i] = 10;	
+			}
+			else if (k==4  && j == 10 && i ==4 ){
+				rewards[k][j][i] = 10;	
+			}
+			else if ((k >=1 && k <= 4)  && j == 12 ){
+				rewards[k][j][i] = 10;	
+			}
+			else if ((k >=1 && k <= 3)  && j == 13 ){
+				rewards[k][j][i] = 10;	
+			}
+			else if ((k >=4 && k <= 11)  && j == 14 && i== 4 ){
+				rewards[k][j][i] = 200;	
+			}
+			else if ((k >=4 && k <= 11)  && j == 14 && i== 4 ){
+				rewards[k][j][i] = 200;	
+			}
+			else if ((k >=4 && k <= 7)  && j == 15 && i== 5 ){
+				rewards[k][j][i] = 200;	
+			}
+			else if ((k >=4 && k <= 7)  && j == 15 && i== 4 ){
+				rewards[k][j][i] = 200;	
+			}
+			else if ((k >=4 && k <= 7)  && j == 16 && i== 7 ){
+				rewards[k][j][i] = 200;	
+			}
+			else if ((k >=7 && k <= 11)  && j == 17 && i== 7 ){
+				rewards[k][j][i] = 200;	
+			}
 	}
+
+}
 
 }
 
