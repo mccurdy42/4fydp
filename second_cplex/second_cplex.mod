@@ -142,6 +142,7 @@ int gymCap = 2;
 
 //decision variables
 dvar boolean x[r1][r2][r3][r4]; //x is the binary location variable, 'boolean' defines a binary variable
+dvar boolean y[subjects][r2][class];
 dvar int u1[r2][numDays]; //slack variable for prep
 dvar int v1[r2][numDays]; //surplus variable for prep
 dvar boolean a[primary][blockCount];
@@ -160,8 +161,12 @@ maximize  sum(i in subjects,j in r2, k in class, t in r4)(rewards[k][j][i])*x[i,
  	- sum(k in class)50*(u3[k] + u4[k] + u5[k] +u6[k]);
 subject to //constraints are declared below
 {	
+	//new
+	forall(i in subjects, k in class)sum(j in r2)y[i,j,k] == 1;
+	forall(i in subjects, k in class, t in r4, j in r2)x[i,j,k,t]-y[i,j,k] <= 0;
+
 	//assignment1- only 1 teacher assigned to a cohort and subject at a time-fixed constr
-	forall(i in subjects, k in class, t in r4) sum(j in r2)x[i,j,k,t] <= 1;
+	forall(i in subjects, k in class, t in r4) sum(j in r2)x[i,j,k,t] <=1;
 	
 	//teacher can only teach one subject/class at a time- new constraint
 	forall(j in r2, t in r4) sum(i in r1, k in r3)x[i,j,k,t] == 1;
@@ -174,6 +179,9 @@ subject to //constraints are declared below
 	
 	//assignment3- each cohort assigned to 12 time periods
 	forall(k in class) sum(i in subjects, j in r2, t in r4)x[i,j,k,t] == 30;
+	
+	//new assignment- each cohort can only have one teacher teaching each subject
+	//forall(k in class, i in subjects) sum(t in r4, j in r2)x[i,j,k,t] <=1;
 	
 	//schedule part time teachers away time
 	forall(j in r2) sum(t in r4)lengtht[t]*x[awaySubject,j,awayCohort,t] >= totalTime - totalTeacherMin[j];
@@ -196,17 +204,17 @@ subject to //constraints are declared below
 	forall(k in frenchCohorts) sum(j in r2, t in r4) lengtht[t]*x[2,j,k,t] >= 300;
 	
 	//science
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] + u3[k] == 100;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] >= 100;
 	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t]  <= 150;
 	
 	//art
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[4,j,k,t] + u4[k] == 300;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[4,j,k,t] >= 300;
 	
 	//Social Studies
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[5,j,k,t] + u5[k] == 100;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[5,j,k,t] >= 100;
 	
 	//Phys-ed
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] + u6[k] == 150;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] >= 150;
 	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t]  <= 200;
 	
 	//French for only applicable classes
