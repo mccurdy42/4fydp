@@ -205,6 +205,7 @@ int gymCap = 2;
 
 //decision variables
 dvar boolean x[r1][r2][r3][r4]; //x is the binary location variable, 'boolean' defines a binary variable
+dvar boolean y[subjects][r2][class]; //y is binary for teacher to subject to cohort assignment
 dvar int u[r2][numDays]; //slack variable for prep
 dvar int v[r2][numDays]; //surplus variable for prep
 dvar boolean a[primary][blockCount];
@@ -214,6 +215,10 @@ maximize  sum(i in subjects,j in r2, k in class, t in r4)(rewards[k][j][i])*x[i,
 
 subject to //constraints are declared below
 {	
+	//1 teacher assigned to subject per cohort
+	forall(i in subjects, k in class)sum(j in r2)y[i,j,k] == 1;
+	forall(i in subjects, k in class, t in r4, j in r2)x[i,j,k,t]-y[i,j,k] <= 0;
+
 	//assignment1- only 1 teacher assigned to a cohort and subject at a time-fixed constr
 	forall(i in subjects, k in class, t in r4) sum(j in r2)x[i,j,k,t] <= 1;
 	
