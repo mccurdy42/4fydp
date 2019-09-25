@@ -7,7 +7,6 @@ public class version1 {
 		// TODO Auto-generated method stub
 
 	}
-
 	
 	public static void modelConfig() {
 	 //define parameters - subjects
@@ -31,6 +30,23 @@ public class version1 {
 		int prepCohort = n3;
 		int awayCohort = n3-1;
 		
+	//define parameters - time
+		int n4 = 30;
+		int basePrepTime = 240;
+		int totalTime = 1500;
+		
+		
+	//time periods matrix
+		int [][] availableTime = new int[n2][n4];
+		//need to fill matrix
+		
+	//time periods array
+		int [] lengtht = {40,60,50,50,60,40,40,60,50,50,60,40,40,60,50,50,60,40,40,60,50,50,60,40,40,60,50,50,60,40};
+		
+
+	//misc parameters
+		int pjd = 50; //penalty value
+		int gymCap = 2;
 		try {
 			//define the model
 			IloCplex cplex = new IloCplex();
@@ -54,7 +70,16 @@ public class version1 {
 			IloRange classGroup = cplex.addRange(1,teachingCohort);
 			IloRange cohortRange = cplex.addRange(n3, n3);
 			
-			
+			//ranges - time
+			IloRange day1 = cplex.addRange(1, 6);
+			IloRange numDays = cplex.addRange(1, 5);
+			IloRange day2 = cplex.addRange(7, 12);
+			IloRange day3 = cplex.addRange(13, 18);
+			IloRange day4 = cplex.addRange(19, 24);
+			IloRange day5 = cplex.addRange(25, 30);
+			IloRange r4 = cplex.addRange(1, n4);
+			IloRange blockCount = cplex.addRange(1,15);
+		
 			
 			//variables
 			IloIntVar x = cplex.boolVar();
