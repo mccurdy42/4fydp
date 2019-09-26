@@ -143,9 +143,71 @@ public class version1 {
 		
 			
 			//variables
-			IloIntVar x = cplex.boolVar();
-			//IloNumVar x = cplex.numVar(0, Double.MAX_VALUE, "x");
-			//IloNumVar y = cplex.numVar(0, Double.MAX_VALUE, "y");
+			
+			//x is the binary location variable, lol this is v questionable
+			IloIntVar [][][][] x = new IloIntVar[n][][][];
+			for(int i = 0;i<n;i++) {
+				x[i] = new IloIntVar[n2][][];
+				for(int j=0; j<x[i].length;j++) {
+					x[i][j] = new IloIntVar[n3][];
+					for(int k =0;k<x[i][j].length; k++) {
+					//	x[i][j][k] = new IloIntVar[n4];
+						x[i][j][k] = cplex.boolVarArray(n4);
+					}
+				}
+			}
+			
+			//y binary decision variable
+			IloIntVar [][][] y = new IloIntVar[7][][];
+			for(int i = 0;i<7;i++) {
+				y[i] = new IloIntVar[n2][];
+				for(int j=0;j<y[i].length;j++) {
+					//y[i][j] = new IloIntVar[teachingCohort];
+					y[i][j] = cplex.boolVarArray(teachingCohort);
+				}
+			}
+			
+			//slack variable for prep
+			IloNumVar [][] u1 = new IloNumVar[n2][];
+			for (int i=0; i<n2;i++) {
+				u1[i] = cplex.numVarArray(5, 0, Double.MAX_VALUE);
+			}
+			
+			//surplus variable for prep
+			IloNumVar [][] v1 = new IloNumVar[n2][];
+			for (int i=0; i<n2;i++) {
+				v1[i] = cplex.numVarArray(5, 0, Double.MAX_VALUE);
+			}
+			
+			//binary a variable
+			IloIntVar [][] a = new IloIntVar[primaryUb][];
+			for(int i = 0;i<primaryUb;i++) {
+				a[i] = cplex.boolVarArray(15);
+			}
+			
+			//binary b variable
+			IloIntVar [][] b = new IloIntVar[0][];
+			b[0] = cplex.boolVarArray(n4);
+		
+			//slack variable for prep time objective to schedule prep **weird because index of 1 only
+			IloNumVar [][] u2 = new IloNumVar[0][];
+			u2[0]= cplex.numVarArray(n4, 0, Double.MAX_VALUE);
+			
+			//surplus variable, same as above
+			IloNumVar [][] v2 = new IloNumVar[0][];
+			v2[0]= cplex.numVarArray(n4, 0, Double.MAX_VALUE);
+			
+			IloNumVar [] u3 = new IloNumVar[teachingCohort];
+			u3 = cplex.numVarArray(teachingCohort, 0, Double.MAX_VALUE);
+			
+			IloNumVar [] u4 = new IloNumVar[teachingCohort];
+			u4 = cplex.numVarArray(teachingCohort, 0, Double.MAX_VALUE);
+			
+			IloNumVar [] u5 = new IloNumVar[teachingCohort];
+			u5 = cplex.numVarArray(teachingCohort, 0, Double.MAX_VALUE);
+			
+			IloNumVar [] u6 = new IloNumVar[teachingCohort];
+			u6 = cplex.numVarArray(teachingCohort, 0, Double.MAX_VALUE);
 
 			//expressions
 			//IloLinearNumExpr objective = cplex.linearNumExpr();
