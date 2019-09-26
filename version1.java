@@ -208,14 +208,47 @@ public class version1 {
 			
 			IloNumVar [] u6 = new IloNumVar[teachingCohort];
 			u6 = cplex.numVarArray(teachingCohort, 0, Double.MAX_VALUE);
-
-			//expressions
-			//IloLinearNumExpr objective = cplex.linearNumExpr();
-			//objective.addTerm(0.12, x);
-			//objective.addTerm(0.15, y);
-			
+		
 			//define objective
-			//cplex.addMinimize(objective);
+			IloLinearNumExpr objective = cplex.linearNumExpr();
+			for(int i =0;i<(n-2);i++) {
+				for(int j=0;j<n2;j++) {
+					for(int k=0;k<teachingCohort;k++) {
+						for(int t=0;t<n4;t++) {
+							objective.addTerm(rewards[k][j][i], x[i][j][k][t]);
+						}
+					}
+				}
+			}
+			
+			for(int j=0;j<n2;j++) {
+				for(int d=0;d<5;d++) {
+					objective.addTerm(-pjd, u1[j][d]);
+				}
+			}
+			
+			for(int j=0;j<n2;j++) {
+				for(int d=0;d<5;d++) {
+					objective.addTerm(pjd, v1[j][d]);
+				}
+			}
+						
+			for(int t=0;t<n4;t++) {
+				objective.addTerm(-50, u2[0][t]);
+			}
+			
+			for(int t=0;t<n4;t++) {
+				objective.addTerm(50, v2[0][t]);
+			}
+			
+			for(int k=0;k<teachingCohort;k++) {
+				objective.addTerm(-50, u3[k]);
+				objective.addTerm(-50, u4[k]);
+				objective.addTerm(-50, u5[k]);
+				objective.addTerm(-50, u6[k]);
+			}
+			
+			cplex.addMaximize(objective);
 			
 			//define constraints
 			//cplex.addGe(cplex.sum(cplex.prod(60, x), cplex.prod(60, y)), 300);
