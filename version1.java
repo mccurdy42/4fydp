@@ -35,18 +35,79 @@ public class version1 {
 		int basePrepTime = 240;
 		int totalTime = 1500;
 		
+	//initializing arrays
+		double [] totalTeacherMin = new double [n2];
+		double [] prep = new double [n2];
+		double [] teachMin = new double [n2];
+		
+	//fill above arrays
+		for (int j = 0; j<=n2-1;j++) {
+			totalTeacherMin[j] = FTE[j]*totalTime;
+			prep[j] = FTE[j]*basePrepTime; //prep time allocation
+			teachMin[j] = totalTeacherMin[j]-prep[j]; //teaching minute allocation
+		}
 		
 	//time periods matrix
 		int [][] availableTime = new int[n2][n4];
-		//need to fill matrix
+		//fill availableTime matrix
 		
+		//first nine rows are 1
+		for(int a = 0; a<=8;a++) {
+			for(int b=0;b<=29;b++) {
+				availableTime[a][b]=1;
+			}
+		}
+		
+		//last 9 entries of 10th row are 0
+		for(int c=0;c<=20;c++) {
+			availableTime[8][c]=1;
+		}
+		
+		//last row is all 1's
+		for(int d=0;d<=29;d++) {
+			availableTime[10][d]=1;
+		}
+				
 	//time periods array
 		int [] lengtht = {40,60,50,50,60,40,40,60,50,50,60,40,40,60,50,50,60,40,40,60,50,50,60,40,40,60,50,50,60,40};
 		
-
-	//misc parameters
+	//defining initial reward matrix
+		int [][][] rewards = new int [teachingCohort][n2][n-2];
+		
+		//fill the initial reward matrix
+		for (int k=0; k<=teachingCohort-1;k++) {
+			for(int j=0;j<=n2-1;j++) {
+				for(int i=0;i<=n-3;i++) {
+					if(k==j) {
+						rewards[k][j][i]=100;
+					}else if((k==1 || k==2 || k==3) && j==7) {
+						//teacher 7 teachers art specialty
+						if(i==4) {
+							rewards[k][j][i]=200;
+						}else {
+							rewards[k][j][i]=10;
+						}
+					}else if(( k==1 || k==2 || k==3)&& j==7) {
+						//teacher 8 teaches gym specialty
+						if(i==6) {
+							rewards[k][j][i]=200;
+						}else {
+							rewards[k][j][i]=10;
+						}
+					}else if (( k==4|| k==5 || k==6)&& j==9) {
+						//9 is a generalist
+						rewards [k][j][i]=10;
+					}else {
+						rewards[k][j][i]=0;
+					}
+				}
+			}
+		}
+			
+		//misc parameters
 		int pjd = 50; //penalty value
 		int gymCap = 2;
+		
 		try {
 			//define the model
 			IloCplex cplex = new IloCplex();
