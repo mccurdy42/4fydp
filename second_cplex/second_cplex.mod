@@ -6,11 +6,15 @@
 //this is the intial assignment problem
 //i=subject
 //9 because 7 subjects 2 dummies
+//changing to 10 because 8 subjects and 2 dummies... 
+//TODO: make number of classes and dependencies variable 
 
-int N=9; 
+int N=10; 
 range r1 = 1..N; 
-range subjects = 1..7;
-string subj[r1] = ["Math", "Language","Science", "Art", "Social-Studies", "Phys-Ed", "French", "Away", "Prep"];
+
+range subjects = 1..8;
+//art and music need to be split up
+string subj[r1] = ["Math", "Language","Science", "Art", "Social-Studies", "Phys-Ed", "French","Music", "Away", "Prep"];
 int prepSubject = N;
 int awaySubject = N-1;
 range subjectRange = N..N;
@@ -202,6 +206,7 @@ for(var k in teaching_class){
 int pjd = 50; //penalty value for deviating from days with more or less than period of prep
 int gymCap = 2;
 
+//TODO: add in slack and surplus variables
 
 //decision variables
 dvar boolean x[r1][r2][r3][r4]; //x is the binary location variable, 'boolean' defines a binary variable
@@ -253,23 +258,31 @@ subject to //constraints are declared below
 	
 	//language for french applicable cohorts
 	forall(k in frenchCohorts) sum(j in r2, t in r4) lengtht[t]*x[2,j,k,t] >= 300;
+	//forall(k in frenchCohorts) sum(j in r2, t in r4) lengtht[t]*x[2,j,k,t] >= 30;
 	
 	//science
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] >= 100;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] >= 80;
+	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] >= 40;
 	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] <= 150;
 	
 	//art
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[4,j,k,t] >= 300;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[4,j,k,t] >= 40;
 	
 	//Social Studies
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[5,j,k,t] >= 100;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[5,j,k,t] >= 40;
 	
 	//Phys-ed
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] >= 150;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] >= 60;
+	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] >= 10;
 	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] <= 200;
 	
 	//French for only applicable classes
 	forall(k in frenchCohorts) sum(j in french, t in r4) lengtht[t]*x[7,j,k,t] >= 200;
+	//forall(k in frenchCohorts) sum(j in french, t in r4) lengtht[t]*x[7,j,k,t] >= 100;
+	
+	//drama
+	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[8,j,k,t] >= 80;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[8,j,k,t] >= 40;
 	
 	//prep
 	forall(j in r2) sum(t in r4) lengtht[t]*x[prepSubject,j,prepCohort,t] >= prep[j];
@@ -304,6 +317,8 @@ int artTime[class];
 int socialStudiesTime[class];
 int physedTime[class];
 int frenchTime[class];
+//added in drama 
+int dramaTime[class];
 int prepTime[r2];
 int teachTime[r2];
 int awayTime[r2];
@@ -376,6 +391,10 @@ writeln("Teacher ","Cohort ", "Subject ","Period ", "Day ");
 						if(i==7)
 						{
 							frenchTime[k] = frenchTime[k] + lengtht[t];					
+						}
+						if(i==8)
+						{
+							dramaTime[k] = dramaTime[k] + lengtht[t];						
 						}
 						if(i==prepSubject)
 						{
