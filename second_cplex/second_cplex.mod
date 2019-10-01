@@ -313,14 +313,14 @@ subject to //constraints are declared below
 	forall(t in r4) sum(j in r2, k in r3)x[6,j,k,t] <= gymCap;
 	
 	//prep time objective - minimize # of times teachers have prep on the same day
-	forall(j in r2) sum(t in day1)x[prepSubject,j,prepCohort,t] + u[j][1] -v[j][1] == 1;
-	forall(j in r2) sum(t in day2)x[prepSubject,j,prepCohort,t] + u[j][2] -v[j][2] == 1;
-	forall(j in r2) sum(t in day3)x[prepSubject,j,prepCohort,t] + u[j][3] -v[j][3] == 1;
-	forall(j in r2) sum(t in day4)x[prepSubject,j,prepCohort,t] + u[j][4] -v[j][4] == 1;
-	forall(j in r2) sum(t in day5)x[prepSubject,j,prepCohort,t] + u[j][5] -v[j][5] == 1;
+	forall(j in r2) sum(t in day1)x[prepSubject,j,prepCohort,t] + u1[j][1] -v1[j][1] == 1;
+	forall(j in r2) sum(t in day2)x[prepSubject,j,prepCohort,t] + u1[j][2] -v1[j][2] == 1;
+	forall(j in r2) sum(t in day3)x[prepSubject,j,prepCohort,t] + u1[j][3] -v1[j][3] == 1;
+	forall(j in r2) sum(t in day4)x[prepSubject,j,prepCohort,t] + u1[j][4] -v1[j][4] == 1;
+	forall(j in r2) sum(t in day5)x[prepSubject,j,prepCohort,t] + u1[j][5] -v1[j][5] == 1;
 	
-	forall(j in r2, d in numDays) u[j][d] >= 0;
-	forall(j in r2, d in numDays) v[j][d] >= 0;
+	forall(j in r2, d in numDays) u1[j][d] >= 0;
+	forall(j in r2, d in numDays) v1[j][d] >= 0;
 	
 	//language for primary has to be back to back
 	forall(d in numDays, k in primary) sum(j in r2)x[2,j,k,1 + (d-1)*6] + sum(j in r2)x[2,j,k,2 + (d-1)*6] == a[k][1 +3*(d-1)]*2;
