@@ -211,13 +211,27 @@ int gymCap = 2;
 //decision variables
 dvar boolean x[r1][r2][r3][r4]; //x is the binary location variable, 'boolean' defines a binary variable
 dvar boolean y[subjects][r2][class]; //y is binary for teacher to subject to cohort assignment
-dvar int u[r2][numDays]; //slack variable for prep
-dvar int v[r2][numDays]; //surplus variable for prep
+dvar int u1[r2][numDays]; //slack variable for prep
+dvar int v1[r2][numDays]; //surplus variable for prep
 dvar boolean a[primary][blockCount];
+dvar boolean b[1..1][r4]; //indicator variable if prep is assigned at time t - only assigned to 1 group of teachers (1 and 2) for now
+dvar int u2[1..1][r4]; //slack and surplus for prep time objective to schedule prep at same time - one group 
+dvar int v2[1..1][r4]; 
+dvar int u3[class];
+dvar int u4[class];
+dvar int u5[class];
+dvar int u6[class];
+
 
 //objective function
-maximize  sum(i in subjects,j in r2, k in class, t in r4)(rewards[k][j][i])*x[i,j,k,t] - (sum(j in r2, d in numDays)pjd*u[j][d] + sum(j in r2, d in numDays)pjd*v[j][d]); //objective function in minimization type
+//maximize  sum(i in subjects,j in r2, k in class, t in r4)(rewards[k][j][i])*x[i,j,k,t] - (sum(j in r2, d in numDays)pjd*u[j][d] + sum(j in r2, d in numDays)pjd*v[j][d]); //objective function in minimization type
 
+//objective function
+maximize  sum(i in subjects,j in r2, k in class, t in r4)(rewards[k][j][i])*x[i,j,k,t]
+	- (sum(j in r2, d in numDays)pjd*u1[j][d] + sum(j in r2, d in numDays)pjd*v1[j][d]) 
+	- (sum(j in 1..1, t in r4)50*u2[j][t] + sum(j in 1..1, t in r4)50*v2[j][t]) 
+ 	- sum(k in class)50*(u3[k] + u4[k] + u5[k] +u6[k]);
+ 	
 subject to //constraints are declared below
 {	
 	//1 teacher assigned to subject per cohort
@@ -261,19 +275,24 @@ subject to //constraints are declared below
 	//forall(k in frenchCohorts) sum(j in r2, t in r4) lengtht[t]*x[2,j,k,t] >= 30;
 	
 	//science
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] >= 80;
+	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] >= 80;
 	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] >= 40;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] + u3[k] == 100;
 	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] <= 150;
 	
 	//art
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[4,j,k,t] >= 40;
+	//known low art number
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[4,j,k,t] + u4[k] == 40;
+	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[4,j,k,t] >= 40;
 	
 	//Social Studies
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[5,j,k,t] >= 40;
-	
+	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[5,j,k,t] >= 40;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[5,j,k,t] + u5[k] == 100;
+		
 	//Phys-ed
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] >= 60;
+	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] >= 60;
 	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] >= 10;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] + u6[k] == 100;
 	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] <= 200;
 	
 	//French for only applicable classes
