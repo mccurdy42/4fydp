@@ -20,9 +20,11 @@ int awaySubject = N-1;
 range subjectRange = N..N;
 
 //j = teacher
-int N2=17;
+//sarah: adding in 4 more teachers for feasibility testing
+//int N2=17;
+int N2=21;
 range r2 = 1..N2;
-float FTE[r2] = [1.0,1.0,1.0,1.0,0.7,1.0,1.0,1.0,1.0,1.0,1.0,0.2,0.2,0.6,0.2,0.3,1.0]; //allocation array for the FTE distribution
+float FTE[r2] = [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.7,1.0,1.0,1.0,1.0,1.0,1.0,0.2,0.2,0.6,0.2,0.3,1.0]; //allocation array for the FTE distribution
 //french indicator
 range french = (N2-1)..N2;
 
@@ -63,6 +65,10 @@ range blockCount = 1..15;
 
 //time periods teachers are available- this will need to be automated from the user input
 int availableTime[r2][r4]= [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -322,10 +328,22 @@ subject to //constraints are declared below
 	forall(j in r2, d in numDays) u1[j][d] >= 0;
 	forall(j in r2, d in numDays) v1[j][d] >= 0;
 	
+	forall(j in 1..1, t in r4) u2[j][t] >= 0;
+	forall(j in 1..1, t in r4) v2[j][t] >= 0;
+	
+	forall(k in class) u3[k] >= 0;
+	forall(k in class) u4[k] >= 0;
+	forall(k in class) u5[k] >= 0;
+	forall(k in class) u6[k] >= 0;
+
+	
 	//language for primary has to be back to back
 	forall(d in numDays, k in primary) sum(j in r2)x[2,j,k,1 + (d-1)*6] + sum(j in r2)x[2,j,k,2 + (d-1)*6] == a[k][1 +3*(d-1)]*2;
 	forall(d in numDays, k in primary) sum(j in r2)x[2,j,k,3 + (d-1)*6] + sum(j in r2)x[2,j,k,4 + (d-1)*6] == a[k][2 +3*(d-1)]*2;
 	forall(d in numDays, k in primary) sum(j in r2)x[2,j,k,5 + (d-1)*6] + sum(j in r2)x[2,j,k,6 + (d-1)*6] == a[k][3 +3*(d-1)]*2;
+
+	//prep time at the same time for teachers teaching same cohort (just did teachers 1 and 2 for now)
+	forall(t in r4) x[prepSubject,1,prepCohort,t] + x[prepSubject,2,prepCohort,t] + u2[1][t] - v2[1][t] == 2*b[1][t] ;
 
 }
 
