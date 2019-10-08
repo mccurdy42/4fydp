@@ -251,9 +251,25 @@ public class version1 {
 			cplex.addMaximize(objective);
 			
 			//define constraints
-			//cplex.addGe(cplex.sum(cplex.prod(60, x), cplex.prod(60, y)), 300);
-			//cplex.addGe(cplex.sum(cplex.prod(12, x), cplex.prod(6, y)), 36);
-			//cplex.addGe(cplex.sum(cplex.prod(10, x), cplex.prod(30, y)), 90);
+			
+			//assignment 1
+			for(int i = 0; i<=7;i++) {
+				for(int k =0; k<=teachingCohort;k++) {
+					for(int t=0;t<=n4;t++) {
+						cplex.addLe(cplex.sum(x[i][k][t]), 1);
+					}
+				}
+			}
+			
+			//teaches 1 subject/ class at a time
+			for(int j = 0; j<=n2; j++) {
+					for(int t=0;t<=n4;t++) {
+					//	cplex.addEq(cplex.sum(x[j][t]), 1);
+					//cplex.addEq(cplex.sum(cplex.sum(x[j][t]),cplex.sum(x[j][t])), cplex.Prod(1, availableTime[j][t]);	
+					}				
+			}
+			
+		
 
 		}
 		
