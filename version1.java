@@ -274,8 +274,9 @@ for(int i=0;i<(n-2);i++) {
 	}
 }
 IloLinearNumExpr[][] constr2 = new IloLinearNumExpr[n2][n4];
-IloLinearNumExpr[][] constr3a = new IloLinearNumExpr[n2][n4];
-IloLinearNumExpr[][] constr3b = new IloLinearNumExpr[n2][n4];
+IloLinearNumExpr[][] constr3 = new IloLinearNumExpr[n2][n4];
+//do not actually need this, add second sum to the first linear expression
+//IloLinearNumExpr[][] constr3b = new IloLinearNumExpr[n2][n4];
 
 for(int j=0; j<n2;j++) {
 	for(int t=0; t<n4;t++) {
@@ -288,13 +289,13 @@ for(int j=0; j<n2;j++) {
 		
 		for(int i=0; i<n-2;i++) {
 			for(int k=0; k<teachingCohort; k++) {
-				constr3a[j][t].addTerm(1, x[i][j][k][t]);
+				constr3[j][t].addTerm(1, x[i][j][k][t]);
 			}
 		}
 		
 		for(int i=n;i<n;i++) {
 			for(int k=n3;k<n3;k++) {
-				constr3b[j][t].addTerm(1,x[i][j][k][t]);
+				constr3[j][t].addTerm(1,x[i][j][k][t]);
 			}
 		}
 	}
@@ -304,8 +305,7 @@ for(int j=0; j<n2;j++) {
 for(int j=0; j<n2;j++) {
 	for(int t=0;t<n4;t++) {
 		cplex.addEq(constr2[j][t], 1);
-		//does not like this sum, not sure how to do this
-		//cplex.addEq(cplex.sum(constr3a, constr3b),availableTime[j][t]);
+		cplex.addEq(constr3[j][t],availableTime[j][t]);
 	}
 }
 
