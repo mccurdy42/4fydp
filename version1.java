@@ -308,6 +308,47 @@ for(int j=0; j<n2;j++) {
 		//cplex.addEq(cplex.sum(constr3a, constr3b),availableTime[j][t]);
 	}
 }
+
+//assignment #2
+IloLinearNumExpr[][] constr4 = new IloLinearNumExpr[teachingCohort][n4];
+
+for(int k=0;k<teachingCohort;k++) {
+	for(int t = 0; t<n4;t++) {
+		constr4[k][t] = cplex.linearNumExpr();
+		for(int i=0;i<n-2;i++) {
+			for(int j=0;j<n2;j++) {
+				constr4[k][t].addTerm(1, x[i][j][k][t]);
+			}
+		}
+	}
+}
+
+for(int k=0; k<teachingCohort;k++) {
+	for(int t=0;t<n4;t++) {
+		cplex.addEq(constr4[k][t], 1);
+	}
+}
+
+
+//assignment #3
+IloLinearNumExpr[] assign3 = new IloLinearNumExpr[teachingCohort];
+
+for(int k=0;k<teachingCohort;k++) {
+	assign3[k] = cplex.linearNumExpr();
+	for(int i=0;i<n-2;i++) {
+		for(int j=0;j<n2;j++) {
+			for(int t=0;t<n4;t++) {
+				assign3[k].addTerm(1, x[i][j][k][t]);				
+			}
+		}
+	}
+}
+
+for(int k=0;k<teachingCohort;k++) {
+	cplex.addEq(assign3[k],30);
+}
+
+
 		}
 		
 		catch (IloException exc) {
