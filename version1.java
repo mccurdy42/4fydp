@@ -251,26 +251,63 @@ public class version1 {
 			cplex.addMaximize(objective);
 			
 			//define constraints
-			
-			//assignment 1
-			for(int i = 0; i<=7;i++) {
-				for(int k =0; k<=teachingCohort;k++) {
-					for(int t=0;t<=n4;t++) {
-						cplex.addLe(cplex.sum(x[i][k][t]), 1);
-					}
-				}
-			}
-			
-			//teaches 1 subject/ class at a time
-			for(int j = 0; j<=n2; j++) {
-					for(int t=0;t<=n4;t++) {
-					//	cplex.addEq(cplex.sum(x[j][t]), 1);
-					//cplex.addEq(cplex.sum(cplex.sum(x[j][t]),cplex.sum(x[j][t])), cplex.Prod(1, availableTime[j][t]);	
-					}				
-			}
-			
-		
+//assignment 1
+IloLinearNumExpr[][][] assign1 = new IloLinearNumExpr[(n-2)][teachingCohort][n4];
 
+for(int i=0;i<(n-2);i++) {
+	for(int k=0; k<n2;k++) {
+		for(int t=0; t<n4;t++) {
+			assign1[i][k][t] = cplex.linearNumExpr();
+			
+			for(int j=0; j<n2;j++) {
+				assign1[i][k][t].addTerm(1, x[i][j][k][t]);
+			}
+		}
+	}
+}
+	
+for(int i=0;i<(n-2);i++) {
+	for(int k=0;k<n2;k++) {
+		for(int t =0;t<n4;t++) {
+			cplex.addLe(assign1[i][k][t], 1);
+		}
+	}
+}
+IloLinearNumExpr[][] constr2 = new IloLinearNumExpr[n2][n4];
+IloLinearNumExpr[][] constr3a = new IloLinearNumExpr[n2][n4];
+IloLinearNumExpr[][] constr3b = new IloLinearNumExpr[n2][n4];
+
+for(int j=0; j<n2;j++) {
+	for(int t=0; t<n4;t++) {
+		constr2[j][t] = cplex.linearNumExpr();
+		for(int i=0; i<n2;i++) {
+			for(int k=0; k<n3;k++) {
+				constr2[j][t].addTerm(1, x[i][j][k][t]);
+			}
+		}
+		
+		for(int i=0; i<n-2;i++) {
+			for(int k=0; k<teachingCohort; k++) {
+				constr3a[j][t].addTerm(1, x[i][j][k][t]);
+			}
+		}
+		
+		for(int i=n;i<n;i++) {
+			for(int k=n3;k<n3;k++) {
+				constr3b[j][t].addTerm(1,x[i][j][k][t]);
+			}
+		}
+	}
+}
+
+
+for(int j=0; j<n2;j++) {
+	for(int t=0;t<n4;t++) {
+		cplex.addEq(constr2[j][t], 1);
+		//does not like this sum, not sure how to do this
+		//cplex.addEq(cplex.sum(constr3a, constr3b),availableTime[j][t]);
+	}
+}
 		}
 		
 		catch (IloException exc) {
