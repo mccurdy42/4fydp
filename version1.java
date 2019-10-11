@@ -268,7 +268,7 @@ for(int i=0;i<(n-2);i++) {
 	
 for(int i=0;i<(n-2);i++) {
 	for(int k=0;k<n2;k++) {
-		for(int t =0;t<n4;t++) {
+		for(int t=0;t<n4;t++) {
 			cplex.addLe(assign1[i][k][t], 1);
 		}
 	}
@@ -309,7 +309,7 @@ for(int j=0; j<n2;j++) {
 	}
 }
 
-//assignment #2
+//assignment #2, constraint 4
 IloLinearNumExpr[][] constr4 = new IloLinearNumExpr[teachingCohort][n4];
 
 for(int k=0;k<teachingCohort;k++) {
@@ -330,7 +330,7 @@ for(int k=0; k<teachingCohort;k++) {
 }
 
 
-//assignment #3
+//assignment #3, constraint 5
 IloLinearNumExpr[] assign3 = new IloLinearNumExpr[teachingCohort];
 
 for(int k=0;k<teachingCohort;k++) {
@@ -348,6 +348,46 @@ for(int k=0;k<teachingCohort;k++) {
 	cplex.addEq(assign3[k],30);
 }
 
+
+//constraint 6, schedule part time teachers away time
+IloLinearNumExpr[] constr6 = new IloLinearNumExpr[n2];
+
+for(int j=0;j<n2;j++){
+	constr6[j] = cplex.linearNumExpr();
+	for(t in n4){
+		constr6[j].addTerm(1,lengtht[t]*x[awaySubject][j][awayCohort][t]);
+	}
+}
+
+for(int j=0;j<n2;j++){
+	cplex.addGe(constr6[j],totalTime-totalTeacherMin[j]);
+}
+
+//constraint 7, math
+
+//constraint 8, language for primary cohorts
+
+//constraint 9, language for french applicable cohorts
+
+//constraint 10, science 
+
+//constraint 11, art
+
+//constraint 12, social studies
+
+//constraint 13, phys-ed
+
+//constraint 14, french for applicable classes
+
+//constraint 15, prep
+
+//constraint 16, teaching mins 
+
+//constraint 17, gym capacity
+
+//constraint 18, prep time objective
+
+//constraint 19, language for primary has to be back to back
 
 		}
 		
