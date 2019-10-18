@@ -357,7 +357,7 @@ IloLinearNumExpr[] constr6 = new IloLinearNumExpr[n2];
 for(int j=0;j<n2;j++){
 	constr6[j] = cplex.linearNumExpr();
 	for(int t=0; t<n4; t++){
-		constr6[j].addTerm(1,(lengtht[t]*x[awaySubject][j][awayCohort][t]));
+		constr6[j].addTerm(lengtht[t],x[awaySubject][j][awayCohort][t])
 	}
 }
 
