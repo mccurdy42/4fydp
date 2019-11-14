@@ -13,20 +13,20 @@ int N=10;
 range r1 = 1..N; 
 
 range subjects = 1..8;
-//art and music need to be split up
 string subj[r1] = ["Math", "Language","Science", "Art", "Social-Studies", "Phys-Ed", "French","Music", "Away", "Prep"];
 int prepSubject = N;
 int awaySubject = N-1;
 range subjectRange = N..N;
 
 //j = teacher
-//sarah: adding in 4 more teachers for feasibility testing
-//int N2=17;
-int N2=21;
+//sarah: adding in 5 more teachers for feasibility testing. 1 additional french and 4 additional engilish
+//int N2=17; original 
+int N2=22;
 range r2 = 1..N2;
-float FTE[r2] = [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.7,1.0,1.0,1.0,1.0,1.0,1.0,0.2,0.2,0.6,0.2,0.3,1.0]; //allocation array for the FTE distribution
+//current: 22 teachers: 1 french and 19 english 
+float FTE[r2] = [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0]; //allocation array for the FTE distribution
 //french indicator
-range french = (N2-1)..N2;
+range french = (N2-2)..N2;
 
 //k= cohort
 //13 because 11 cohorts, 2 dummies
@@ -45,6 +45,7 @@ int awayCohort = N3-1;
 range cohortRange = N3..N3;
 
 //t = time
+//to revisit as a concept
 int N4=30;
 range day1 = 1..6;
 range numDays = 1..5;
@@ -72,18 +73,19 @@ int availableTime[r2][r4]= [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0],
-							[1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1],
-							[1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]];
 
 execute {
@@ -210,7 +212,7 @@ for(var k in teaching_class){
 
 
 int pjd = 50; //penalty value for deviating from days with more or less than period of prep
-int gymCap = 2;
+int gymCap = 5;
 
 //TODO: add in slack and surplus variables
 
@@ -228,6 +230,22 @@ dvar int u4[class];
 dvar int u5[class];
 dvar int u6[class];
 
+//math slack and surplus
+dvar int s_math1[class];
+dvar int s_math2[class];
+dvar int s_math3[class];
+dvar int s_math4[class];
+dvar int s_math5[class];
+
+//language slack and surplus 
+dvar int s_lang1[class];
+dvar int s_lang2[class];
+dvar int s_lang3[class];
+dvar int s_lang4[class];
+dvar int s_lang5[class];
+
+//french slack and surplus 
+dvar int s_french[class];
 
 //objective function
 //maximize  sum(i in subjects,j in r2, k in class, t in r4)(rewards[k][j][i])*x[i,j,k,t] - (sum(j in r2, d in numDays)pjd*u[j][d] + sum(j in r2, d in numDays)pjd*v[j][d]); //objective function in minimization type
@@ -236,7 +254,9 @@ dvar int u6[class];
 maximize  sum(i in subjects,j in r2, k in class, t in r4)(rewards[k][j][i])*x[i,j,k,t]
 	- (sum(j in r2, d in numDays)pjd*u1[j][d] + sum(j in r2, d in numDays)pjd*v1[j][d]) 
 	- (sum(j in 1..1, t in r4)50*u2[j][t] + sum(j in 1..1, t in r4)50*v2[j][t]) 
- 	- sum(k in class)50*(u3[k] + u4[k] + u5[k] +u6[k]);
+ 	- sum(k in class)50*(u3[k] + u4[k] + u5[k] +u6[k] + s_math1[k] + s_math2[k] + s_math3[k]+ s_math4[k] + s_math5[k])
+ 	- sum(k in primary)50*(s_lang1[k]+s_lang2[k]+s_lang3[k]+s_lang4[k]+s_lang5[k])-
+ 	- sum(k in frenchCohorts)50*(s_french[k]);
  	
 subject to //constraints are declared below
 {	
@@ -263,26 +283,32 @@ subject to //constraints are declared below
 	forall(j in r2) sum(t in r4)lengtht[t]*x[awaySubject,j,awayCohort,t] >= totalTime - totalTeacherMin[j];
 	
 	//math
-	forall(k in class) sum(j in r2, t in day1) lengtht[t]*x[1,j,k,t] == 60;
-	forall(k in class) sum(j in r2, t in day2) lengtht[t]*x[1,j,k,t] == 60;
-	forall(k in class) sum(j in r2, t in day3) lengtht[t]*x[1,j,k,t] == 60;
-	forall(k in class) sum(j in r2, t in day4) lengtht[t]*x[1,j,k,t] == 60;
-	forall(k in class) sum(j in r2, t in day5) lengtht[t]*x[1,j,k,t] == 60;
+	forall(k in class) sum(j in r2, t in day1) lengtht[t]*x[1,j,k,t] + s_math1[k]== 60;
+	forall(k in class) sum(j in r2, t in day2) lengtht[t]*x[1,j,k,t] + s_math2[k]== 60;
+	forall(k in class) sum(j in r2, t in day3) lengtht[t]*x[1,j,k,t]+ s_math3[k] == 60;
+	forall(k in class) sum(j in r2, t in day4) lengtht[t]*x[1,j,k,t] + s_math4[k]== 60;
+	forall(k in class) sum(j in r2, t in day5) lengtht[t]*x[1,j,k,t]+ s_math5[k] == 60;
 	
 	//language for primary cohorts
-	forall(k in primary) sum(j in r2, t in day1) lengtht[t]*x[2,j,k,t] == 100;
-	forall(k in primary) sum(j in r2, t in day2) lengtht[t]*x[2,j,k,t] == 100;
-	forall(k in primary) sum(j in r2, t in day3) lengtht[t]*x[2,j,k,t] == 100;
-	forall(k in primary) sum(j in r2, t in day4) lengtht[t]*x[2,j,k,t] == 100;
-	forall(k in primary) sum(j in r2, t in day5) lengtht[t]*x[2,j,k,t] == 100;
+	forall(k in primary) sum(j in r2, t in day1) lengtht[t]*x[2,j,k,t] + s_lang1[k] == 100;
+	forall(k in primary) sum(j in r2, t in day2) lengtht[t]*x[2,j,k,t] + s_lang2[k]== 100;
+	forall(k in primary) sum(j in r2, t in day3) lengtht[t]*x[2,j,k,t] + s_lang3[k]== 100;
+	forall(k in primary) sum(j in r2, t in day4) lengtht[t]*x[2,j,k,t] + s_lang4[k]== 100;
+	forall(k in primary) sum(j in r2, t in day5) lengtht[t]*x[2,j,k,t] + s_lang5[k]== 100;
 	
 	//language for french applicable cohorts
-	forall(k in frenchCohorts) sum(j in r2, t in r4) lengtht[t]*x[2,j,k,t] >= 300;
-	//forall(k in frenchCohorts) sum(j in r2, t in r4) lengtht[t]*x[2,j,k,t] >= 30;
+	//forall(k in frenchCohorts) sum(j in r2, t in r4) lengtht[t]*x[2,j,k,t] >= 300;
+	//medium french
+	//forall(k in frenchCohorts) sum(j in r2, t in r4) lengtht[t]*x[2,j,k,t] >= 100;
+	//low french - succ 
+	//forall(k in frenchCohorts) sum(j in r2, t in r4) lengtht[t]*x[2,j,k,t] >= 60;
+	forall(k in frenchCohorts) sum(j in r2, t in r4) lengtht[t]*x[2,j,k,t] + s_french[k]== 100;
 	
 	//science
 	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] >= 80;
 	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] >= 40;
+	//extra low val - succ
+	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] + u3[k] == 40;
 	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] + u3[k] == 100;
 	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] <= 150;
 	
@@ -293,16 +319,19 @@ subject to //constraints are declared below
 	
 	//Social Studies
 	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[5,j,k,t] >= 40;
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[5,j,k,t] + u5[k] == 100;
+	//low socials
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[5,j,k,t] + u5[k] == 40;
+	
 		
 	//Phys-ed
 	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] >= 60;
 	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] >= 10;
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] + u6[k] == 100;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] + u6[k] == 60;
 	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] <= 200;
 	
 	//French for only applicable classes
-	forall(k in frenchCohorts) sum(j in french, t in r4) lengtht[t]*x[7,j,k,t] >= 200;
+	//forall(k in frenchCohorts) sum(j in french, t in r4) lengtht[t]*x[7,j,k,t] >= 200;
+	//low french - suc
 	//forall(k in frenchCohorts) sum(j in french, t in r4) lengtht[t]*x[7,j,k,t] >= 100;
 	
 	//drama
@@ -331,11 +360,23 @@ subject to //constraints are declared below
 	forall(j in 1..1, t in r4) u2[j][t] >= 0;
 	forall(j in 1..1, t in r4) v2[j][t] >= 0;
 	
+	//limiting surplus. ensuring variables remain as 
 	forall(k in class) u3[k] >= 0;
 	forall(k in class) u4[k] >= 0;
 	forall(k in class) u5[k] >= 0;
 	forall(k in class) u6[k] >= 0;
-
+	forall(k in class) s_math1[k] >= 0;
+	forall(k in class) s_math2[k] >= 0;
+	forall(k in class) s_math3[k] >= 0;
+	forall(k in class) s_math4[k] >= 0;
+	forall(k in class) s_math5[k] >= 0;
+	forall(k in class) s_lang1[k] >= 0;
+	forall(k in class) s_lang2[k] >= 0;
+	forall(k in class) s_lang3[k] >= 0;
+	forall(k in class) s_lang4[k] >= 0;
+	forall(k in class) s_lang5[k] >= 0;
+	forall(k in class) s_french[k] >= 0;
+	
 	
 	//language for primary has to be back to back
 	forall(d in numDays, k in primary) sum(j in r2)x[2,j,k,1 + (d-1)*6] + sum(j in r2)x[2,j,k,2 + (d-1)*6] == a[k][1 +3*(d-1)]*2;
