@@ -9,25 +9,25 @@
 //changing to 10 because 8 subjects and 2 dummies... 
 //TODO: make number of classes and dependencies variable 
 
-int N=10; 
+int N=11; 
 range r1 = 1..N; 
 
-range subjects = 1..8;
+range subjects = 1..9;
 //art and music need to be split up
-string subj[r1] = ["Math", "Language","Science", "Art", "Social-Studies", "Phys-Ed", "French","Music", "Away", "Prep"];
+string subj[r1] = ["Math", "Language","Science", "Art", "Social-Studies", "Phys-Ed", "French","Music", "Drama", "Away", "Prep"];
 int prepSubject = N;
 int awaySubject = N-1;
 range subjectRange = N..N;
 
 //j = teacher
-int N2=17;
+int N2=16;
 range r2 = 1..N2;
-float FTE[r2] = [1.0,1.0,1.0,1.0,0.7,1.0,1.0,1.0,1.0,1.0,1.0,0.2,0.2,0.6,0.2,0.3,1.0]; //allocation array for the FTE distribution
+float FTE[r2] = [1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.2,0.2,0.6,0.2,1.0,1.0]; //allocation array for the FTE distribution
 //french indicator
 range french = (N2-1)..N2;
 
 //k= cohort
-//13 because 11 cohorts, 2 dummies
+//13 because 11 cohorts, 2 dummies (away and prep)
 int N3=13;
 range r3 = 1..N3;
 
@@ -44,8 +44,8 @@ range cohortRange = N3..N3;
 
 //t = time
 int N4=30;
-range day1 = 1..6;
 range numDays = 1..5;
+range day1 = 1..6;
 range day2 = 7..12;
 range day3 = 13..18;
 range day4 = 19..24;
@@ -66,18 +66,17 @@ int availableTime[r2][r4]= [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1],
-							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0],
-							[1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1],
-							[1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-							[1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,1,1,1],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],
+							[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,1,1,1],
+							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 							[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]];
 
 execute {
@@ -214,9 +213,9 @@ dvar boolean y[subjects][r2][class]; //y is binary for teacher to subject to coh
 dvar int u1[r2][numDays]; //slack variable for prep
 dvar int v1[r2][numDays]; //surplus variable for prep
 dvar boolean a[primary][blockCount];
-dvar boolean b[1..1][r4]; //indicator variable if prep is assigned at time t - only assigned to 1 group of teachers (1 and 2) for now
-dvar int u2[1..1][r4]; //slack and surplus for prep time objective to schedule prep at same time - one group 
-dvar int v2[1..1][r4]; 
+//dvar boolean b[1..1][r4]; //indicator variable if prep is assigned at time t - only assigned to 1 group of teachers (1 and 2) for now
+//dvar int u2[1..1][r4]; //slack and surplus for prep time objective to schedule prep at same time - one group 
+//dvar int v2[1..1][r4]; 
 dvar int u3[class];
 dvar int u4[class];
 dvar int u5[class];
@@ -228,9 +227,9 @@ dvar int u6[class];
 
 //objective function
 maximize  sum(i in subjects,j in r2, k in class, t in r4)(rewards[k][j][i])*x[i,j,k,t]
-	- (sum(j in r2, d in numDays)pjd*u1[j][d] + sum(j in r2, d in numDays)pjd*v1[j][d]) 
-	- (sum(j in 1..1, t in r4)50*u2[j][t] + sum(j in 1..1, t in r4)50*v2[j][t]) 
- 	- sum(k in class)50*(u3[k] + u4[k] + u5[k] +u6[k]);
+	- (sum(j in r2, d in numDays)pjd*u1[j][d] + sum(j in r2, d in numDays)pjd*v1[j][d]) ;
+//	- (sum(j in 1..1, t in r4)50*u2[j][t] + sum(j in 1..1, t in r4)50*v2[j][t]) 
+ //	- sum(k in class)50*(u3[k] + u4[k] + u5[k] +u6[k]);
  	
 subject to //constraints are declared below
 {	
@@ -244,7 +243,7 @@ subject to //constraints are declared below
 	//teacher can only teach one subject/class at a time- new constraint
 	forall(j in r2, t in r4) sum(i in r1, k in r3)x[i,j,k,t] == 1;
 	
-	//teacher can only teach one subject/class at a time - make this only for prep and teaching periods
+	//teacher can only teach one subject/class at a time - if you're assigned to teach, cant be assigned away/prep and vice versa
 	forall(j in r2, t in r4) sum(i in subjects, k in class)x[i,j,k,t] + sum(i in subjectRange, k in cohortRange)x[i,j,k,t]  == 1* availableTime[j][t];
 	
 	//assignment2 - at every time, each cohort needs only one teacher and one subject
@@ -277,31 +276,36 @@ subject to //constraints are declared below
 	//science
 	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] >= 80;
 	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] >= 40;
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] + u3[k] == 100;
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] <= 150;
+	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] + u3[k] == 100;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] >= 80;
 	
 	//art
 	//known low art number
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[4,j,k,t] + u4[k] == 40;
-	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[4,j,k,t] >= 40;
+	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[4,j,k,t] + u4[k] == 40;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[4,j,k,t] >= 40;
 	
 	//Social Studies
-	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[5,j,k,t] >= 40;
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[5,j,k,t] + u5[k] == 100;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[5,j,k,t] >= 80;
+//	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[5,j,k,t] + u5[k] == 100;
 		
 	//Phys-ed
 	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] >= 60;
 	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] >= 10;
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] + u6[k] == 100;
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] <= 200;
+//	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] + u6[k] == 100;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[6,j,k,t] >= 80;
 	
 	//French for only applicable classes
 	forall(k in frenchCohorts) sum(j in french, t in r4) lengtht[t]*x[7,j,k,t] >= 200;
+	forall(k in primary) sum(j in r2, t in r4) lengtht[t]*x[7,j,k,t] == 0;
 	//forall(k in frenchCohorts) sum(j in french, t in r4) lengtht[t]*x[7,j,k,t] >= 100;
 	
-	//drama
+	//music
 	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[8,j,k,t] >= 80;
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[8,j,k,t] >= 40;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[8,j,k,t] >= 80;
+	
+	//drama
+	//forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[9,j,k,t] >= 80;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[9,j,k,t] >= 40;
 	
 	//prep
 	forall(j in r2) sum(t in r4) lengtht[t]*x[prepSubject,j,prepCohort,t] >= prep[j];
@@ -335,8 +339,7 @@ int scienceTime[class];
 int artTime[class];
 int socialStudiesTime[class];
 int physedTime[class];
-int frenchTime[class];
-//added in drama 
+int frenchTime[class]; 
 int dramaTime[class];
 int prepTime[r2];
 int teachTime[r2];
