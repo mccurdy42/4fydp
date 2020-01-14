@@ -4,4 +4,7 @@
   <category name="cplex">
     <setting name="epgap" value="0.1"/>
   </category>
+  <category name="run">
+    <setting name="run_engineexportextension" value="lp"/>
+  </category>
 </settings>
