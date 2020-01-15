@@ -229,8 +229,8 @@ dvar boolean g[class][blockCount]; //not yet implemented
 
 //objective function
 maximize  sum(i in subjects,j in r2, k in class, t in r4)(rewards[k][j][i])*x[i,j,k,t]
-	- (sum(j in r2, d in numDays)pjd*u1[j][d] + sum(j in r2, d in numDays)pjd*v1[j][d])
-	- (sum(k in class, d in numDays)150*v9[k][d]) ; 
+	- (sum(j in r2, d in numDays)pjd*u1[j][d] + sum(j in r2, d in numDays)pjd*v1[j][d]);
+//	- (sum(k in class, d in numDays)150*v9[k][d]) ; 
 //	- (sum(k in class, d in numDays)0*u7[k][d] + sum(k in class, d in numDays)150*v7[k][d]) 
 	//- (sum(k in class, d in numDays)0*u10[k][d] + sum(k in class, d in numDays)150*v10[k][d]) ;
 //	- (sum(j in 1..1, t in r4)50*u2[j][t] + sum(j in 1..1, t in r4)50*v2[j][t]); //include this when we do prep at same time for same cohort
