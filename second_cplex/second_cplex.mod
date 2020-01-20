@@ -229,10 +229,10 @@ dvar boolean g[class][blockCount]; //not yet implemented
 
 //objective function
 maximize  sum(i in subjects,j in r2, k in class, t in r4)(rewards[k][j][i])*x[i,j,k,t]
-	- (sum(j in r2, d in numDays)pjd*u1[j][d] + sum(j in r2, d in numDays)pjd*v1[j][d]);
-//	- (sum(k in class, d in numDays)150*v9[k][d]) ; 
-//	- (sum(k in class, d in numDays)0*u7[k][d] + sum(k in class, d in numDays)150*v7[k][d]) 
-	//- (sum(k in class, d in numDays)0*u10[k][d] + sum(k in class, d in numDays)150*v10[k][d]) ;
+	- (sum(j in r2, d in numDays)pjd*u1[j][d] + sum(j in r2, d in numDays)pjd*v1[j][d])
+	- (sum(k in class, d in numDays)150*v9[k][d])  
+	- (sum(k in class, d in numDays)0*u7[k][d] + sum(k in class, d in numDays)150*v7[k][d]) 
+	- (sum(k in class, d in numDays)0*u10[k][d] + sum(k in class, d in numDays)150*v10[k][d]) ;
 //	- (sum(j in 1..1, t in r4)50*u2[j][t] + sum(j in 1..1, t in r4)50*v2[j][t]); //include this when we do prep at same time for same cohort
 
  	
@@ -281,7 +281,7 @@ subject to //constraints are declared below
 	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[3,j,k,t] >= 80;
 	
 	//art
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[4,j,k,t] >= 40;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[4,j,k,t] >= 80;
 	
 	//Social Studies
 	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[5,j,k,t] >= 80;
@@ -294,7 +294,7 @@ subject to //constraints are declared below
 	forall(k in primary) sum(j in r2, t in r4) lengtht[t]*x[7,j,k,t] == 0; //primary cant have french
 	
 	//music
-	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[8,j,k,t] >= 40;
+	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[8,j,k,t] >= 80;
 	
 	//drama
 	forall(k in class) sum(j in r2, t in r4) lengtht[t]*x[9,j,k,t] >= 40;
@@ -336,42 +336,38 @@ subject to //constraints are declared below
 	forall(d in numDays, k in primary) sum(j in r2)x[2,j,k,1 + (d-1)*6] + sum(j in r2)x[2,j,k,2 + (d-1)*6] == a[k][1 +3*(d-1)]*2;
 	forall(d in numDays, k in primary) sum(j in r2)x[2,j,k,3 + (d-1)*6] + sum(j in r2)x[2,j,k,4 + (d-1)*6] == a[k][2 +3*(d-1)]*2;
 	forall(d in numDays, k in primary) sum(j in r2)x[2,j,k,5 + (d-1)*6] + sum(j in r2)x[2,j,k,6 + (d-1)*6] == a[k][3 +3*(d-1)]*2;
-
 	
-	
-	//EVERY CONSTRAINT BELOW HERE SHOULD BE COMMENTED RIGHT NOW- KEEPING ALL HERE FOR CURRENT/FUTURE TESTING
-	
-	//minimize # of times cohorts have gym on the same day- not included in pull request- keep for testing
-	//forall(k in class) sum(t in day1, j in r2)x[6,j,k,t]  -v9[k][1] <= 1;
-	//forall(k in class) sum(t in day2, j in r2)x[6,j,k,t]  -v9[k][2] <= 1;
-	//forall(k in class) sum(t in day3, j in r2)x[6,j,k,t]  -v9[k][3] <= 1;
-	//forall(k in class) sum(t in day4, j in r2)x[6,j,k,t]  -v9[k][4] <= 1;
-	//forall(k in class) sum(t in day5, j in r2)x[6,j,k,t]  -v9[k][5] <= 1;
+	//minimize # of times cohorts have gym on the same day
+	forall(k in class) sum(t in day1, j in r2)x[6,j,k,t]  -v9[k][1] <= 1;
+	forall(k in class) sum(t in day2, j in r2)x[6,j,k,t]  -v9[k][2] <= 1;
+	forall(k in class) sum(t in day3, j in r2)x[6,j,k,t]  -v9[k][3] <= 1;
+	forall(k in class) sum(t in day4, j in r2)x[6,j,k,t]  -v9[k][4] <= 1;
+	forall(k in class) sum(t in day5, j in r2)x[6,j,k,t]  -v9[k][5] <= 1;
 	
 	//forall(k in class, d in numDays) u9[k][d] >= 0; not included in pull request- keep for testing
-	//forall(k in class, d in numDays) v9[k][d] >= 0;
+	forall(k in class, d in numDays) v9[k][d] >= 0;
 	
 
 	//minimize # of times cohorts have science on the same day- not included in pull request- keep for testing
-	//forall(k in class) sum(t in day1, j in r2)x[3,j,k,t] + u7[k][1] -v7[k][1] == 1;
-	//forall(k in class) sum(t in day2, j in r2)x[3,j,k,t] + u7[k][2] -v7[k][2] == 1;
-	//forall(k in class) sum(t in day3, j in r2)x[3,j,k,t] + u7[k][3] -v7[k][3] == 1;
-	//forall(k in class) sum(t in day4, j in r2)x[3,j,k,t] + u7[k][4] -v7[k][4] == 1;
-	//forall(k in class) sum(t in day5, j in r2)x[3,j,k,t] + u7[k][5] -v7[k][5] == 1;
+	forall(k in class) sum(t in day1, j in r2)x[3,j,k,t] + u7[k][1] -v7[k][1] == 1;
+	forall(k in class) sum(t in day2, j in r2)x[3,j,k,t] + u7[k][2] -v7[k][2] == 1;
+	forall(k in class) sum(t in day3, j in r2)x[3,j,k,t] + u7[k][3] -v7[k][3] == 1;
+	forall(k in class) sum(t in day4, j in r2)x[3,j,k,t] + u7[k][4] -v7[k][4] == 1;
+	forall(k in class) sum(t in day5, j in r2)x[3,j,k,t] + u7[k][5] -v7[k][5] == 1;
 	
-	//forall(k in class, d in numDays) u7[k][d] >= 0;
-	//forall(k in class, d in numDays) v7[k][d] >= 0;
+	forall(k in class, d in numDays) u7[k][d] >= 0;
+	forall(k in class, d in numDays) v7[k][d] >= 0;
 	
 
 	//minimize # of times cohorts have social studies on the same day- not included in pull request- keep for testing
-	//forall(k in class) sum(t in day1, j in r2)x[5,j,k,t] + u10[k][1] -v10[k][1] == 1;
-	//forall(k in class) sum(t in day2, j in r2)x[5,j,k,t] + u10[k][2] -v10[k][2] == 1;
-	//forall(k in class) sum(t in day3, j in r2)x[5,j,k,t] + u10[k][3] -v10[k][3] == 1;
-	//forall(k in class) sum(t in day4, j in r2)x[5,j,k,t] + u10[k][4] -v10[k][4] == 1;
-	//forall(k in class) sum(t in day5, j in r2)x[5,j,k,t] + u10[k][5] -v10[k][5] == 1;
+	forall(k in class) sum(t in day1, j in r2)x[5,j,k,t] + u10[k][1] -v10[k][1] == 1;
+	forall(k in class) sum(t in day2, j in r2)x[5,j,k,t] + u10[k][2] -v10[k][2] == 1;
+	forall(k in class) sum(t in day3, j in r2)x[5,j,k,t] + u10[k][3] -v10[k][3] == 1;
+	forall(k in class) sum(t in day4, j in r2)x[5,j,k,t] + u10[k][4] -v10[k][4] == 1;
+	forall(k in class) sum(t in day5, j in r2)x[5,j,k,t] + u10[k][5] -v10[k][5] == 1;
 	
-	//forall(k in class, d in numDays) u10[k][d] >= 0;
-	//forall(k in class, d in numDays) v10[k][d] >= 0;
+	forall(k in class, d in numDays) u10[k][d] >= 0;
+	forall(k in class, d in numDays) v10[k][d] >= 0;
 
 	//maximize the number of back to back art classes if assigned to the same day-no include in pull request- keep for testing but hasnt beeen tested
 	//forall(d in numDays, k in class) sum(j in r2)x[4,j,k,1 + (d-1)*6] + sum(j in r2)x[4,j,k,2 + (d-1)*6] +u8[d][k][1] -v8[d][k][1]== g[k][1 +3*(d-1)]*2;
