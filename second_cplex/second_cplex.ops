@@ -2,7 +2,7 @@
 
 <settings version="2">
   <category name="cplex">
-    <setting name="epgap" value="0.02"/>
+    <setting name="epgap" value="0.06"/>
   </category>
   <category name="run">
     <setting name="run_engineexportextension" value="lp"/>
